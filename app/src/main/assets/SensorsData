@@ -1,0 +1,58 @@
+{
+  "Sensors" :[
+    {
+      "id":"01",
+      "Sensor_Unique_ID":"34924",
+      "Sensor_Type":"Temp",
+      "Sensor_Min_Threshold":"50",
+      "Sensor_Max_Threshold":"5000",
+      "Severity_level":"H"
+
+    },
+    {
+      "id":"02",
+      "Sensor_Unique_ID":"34914",
+      "Sensor_Type":"Humi",
+      "Sensor_Min_Threshold":"50",
+      "Sensor_Max_Threshold":"5000",
+      "Severity_level":"M"
+
+    },
+    {
+      "id":"03",
+      "Sensor_Unique_ID":"31924",
+      "Sensor_Type":"Door",
+      "Sensor_Min_Threshold":"50",
+      "Sensor_Max_Threshold":"5000",
+      "Severity_level":"L"
+
+    },
+    {
+      "id":"04",
+      "Sensor_Unique_ID":"34124",
+      "Sensor_Type":"Break Heat",
+      "Sensor_Min_Threshold":"50",
+      "Sensor_Max_Threshold":"5000",
+      "Severity_level":"H"
+
+    },
+    {
+      "id":"05",
+      "Sensor_Unique_ID":"34104",
+      "Sensor_Type":"Break Heat",
+      "Sensor_Min_Threshold":"50",
+      "Sensor_Max_Threshold":"5000",
+      "Severity_level":"L"
+
+    },
+    {
+      "id":"06",
+      "Sensor_Unique_ID":"34404",
+      "Sensor_Type":"Break Heat",
+      "Sensor_Min_Threshold":"50",
+      "Sensor_Max_Threshold":"5000",
+      "Severity_level":"L"
+
+    }
+  ]
+}

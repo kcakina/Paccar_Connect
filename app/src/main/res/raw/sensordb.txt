@@ -1,0 +1,7 @@
+001 sensornameI
+002 temperature 
+003 Gas
+004 sensorname2
+005 sensorname3
+006 sensorname4
+007 sensorname5
