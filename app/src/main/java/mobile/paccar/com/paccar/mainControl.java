@@ -41,10 +41,6 @@ public class mainControl extends ActionBarActivity {
 
         setContentView(R.layout.activity_profile);
 
-        //call the widgtes
-        btnOn = (Button)findViewById(R.id.button2);
-        btnOff = (Button)findViewById(R.id.button3);
-        btnDis = (Button)findViewById(R.id.button4);
     }
 
 

@@ -69,11 +69,6 @@ public class Notification extends AppCompatActivity {
                 startActivity(new Intent(this,sensorListActivity.class));
                 return true;
 
-            case R.id.action_save:
-                //need save page
-                startActivity(new Intent(this,Notification.class));
-                return true;
-
         }
         return super.onOptionsItemSelected(item);
     }

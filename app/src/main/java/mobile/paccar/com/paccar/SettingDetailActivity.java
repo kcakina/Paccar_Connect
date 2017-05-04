@@ -114,12 +114,6 @@ public class SettingDetailActivity extends AppCompatActivity {
                 startActivity(new Intent(this,sensorListActivity.class));
                 return true;*/
 
-            //link to save changes
-            case R.id.action_save:
-                //  startActivity(new Intent(this, ));
-                startActivity(new Intent(this,sensorListActivity.class));
-                return true;
-
             // Link to the notifications page
             case R.id.action_notification:
                 //need notification page
