@@ -14,11 +14,15 @@
     tools:context="mobile.paccar.com.paccar.ProfileActivity"
     tools:showIn="@layout/activity_profile">
 
-<!--   <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentStart="true">-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose a profile to connect to:"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="60dp"
+        android:textSize="30sp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,124 +33,12 @@
         android:layout_alignParentEnd="true">
 
         <TableLayout
+            android:id="@+id/profileTable"
             android:layout_width="match_parent"
-            android:layout_height="20dp" >
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+            android:layout_height="20dp">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1.0"
-                    android:padding="30dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/textColorPrimaryNight"
-                    android:textSize="20sp"
-                    android:text="@string/profile_1"
-                    android:id="@+id/Profile1"
-                    android:width="200dp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1.0"
-                    android:padding="30dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/textColorPrimaryNight"
-                    android:textSize="20sp"
-                    android:text="@string/profile_2"
-                    android:id="@+id/Profile2"
-                    android:width="200dp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1.0"
-                    android:padding="30dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/textColorPrimaryNight"
-                    android:textSize="20sp"
-                    android:text="@string/profile_3"
-                    android:id="@+id/Profile3"
-                    android:width="200dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1.0"
-                    android:padding="30dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/textColorPrimaryNight"
-                    android:textSize="20sp"
-                    android:text="Profile 4"
-                    android:width="200dp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1.0"
-                    android:padding="30dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/textColorPrimaryNight"
-                    android:textSize="20sp"
-                    android:text="Profile 5"
-                    android:width="200dp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1.0"
-                    android:padding="30dp"
-                    android:textAllCaps="true"
-                    android:textColor="@color/textColorPrimaryNight"
-                    android:textSize="20sp"
-                    android:text="Custom (+)"
-                    android:width="200dp"
-                    android:backgroundTint="@color/colorSecondary" />
-
-            </TableRow>
+            <!-- buttons added dynamically-->
 
         </TableLayout>
     </ScrollView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/json_example"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/paccar_connect"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:textSize="35sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
-    <!--</RelativeLayout>-->
 </RelativeLayout>

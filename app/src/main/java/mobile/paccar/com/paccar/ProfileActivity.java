@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,7 +31,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.TableRow;
+import android.widget.TableRow.LayoutParams;
+import android.view.Gravity;
+import android.widget.LinearLayout;
+
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -80,17 +87,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.UUID;
 
-public class ProfileActivity extends AppCompatActivity{
+public class ProfileActivity extends AppCompatActivity {
 
-
-    Button getdata,update;
+    Button getdata, update;
     TextView tv;
     EditText ed1;
     String data;
     private String file = "mydata";
     private static final int size = 25;
     private List<String> list = new ArrayList<String>();
-
 
     ///bluetooth stuff
     Button btnOn, btnOff;
@@ -101,7 +106,6 @@ public class ProfileActivity extends AppCompatActivity{
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
     private StringBuilder recDataString = new StringBuilder();
-
 
     // SPP UUID service - this should work for most devices
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -133,7 +137,7 @@ public class ProfileActivity extends AppCompatActivity{
         btnOff = (Button) findViewById(R.id.Profile2);
         btnOff = (Button) findViewById(R.id.Profile3);
         txtString = (TextView) findViewById(R.id.textView2);
-        txtStringLength = (TextView)findViewById(R.id.textView);
+        txtStringLength = (TextView) findViewById(R.id.textView);
 
         //bluetooth
         Intent intent = new Intent(this, DataServices.class);
@@ -205,6 +209,51 @@ public class ProfileActivity extends AppCompatActivity{
             output.setText(data);
         } catch (JSONException e) {e.printStackTrace();}*/
 
+        // Creating buttons!
+        TableLayout profileTable;
+        TableRow tr = null;
+        String[] mTextofButton = { "D", "E", "I", "J", "L", "M", "G", "R", "N",
+                "T", "H", "P", "K", "Y", "V" };
+
+        profileTable = (TableLayout) findViewById(R.id.profileTable); // Params specified in XML
+
+        int i = 0;
+        while (i < mTextofButton.length) { //Fix this so it reads in the number of profiles
+            if (i % 2 == 0) { // number of cols
+                tr = new TableRow(this);
+                profileTable.addView(tr);
+            }
+            Button btn = new Button(this);
+            btn.setTextColor(getResources().getColor(R.color.textColorPrimaryNight)); // set text color
+            btn.setText(mTextofButton[i]); // set profile name
+            btn.setAllCaps(true); // Text to all caps
+            btn.setTextSize(Float.parseFloat("20sp")); // Set text size
+            btn.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)); // Sets layout params
+            // add margins for greater space between buttons
+            btn.setWidth(200);
+            btn.setHeight(90);
+            btn.setId(i); // Sets Id for button
+            // btn.setPadding(30, 30, 30, 30); // left, top, right, bottom - Do they all need to be the same? height covers
+            ;
+            btn.setOnClickListener( new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    System.out.println("v.getid is:- " + v.getId());
+                    // Add link to home page? carries over correct profile data?
+                }
+            });
+
+            tr.setLayoutParams(new TableRow.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT));
+            tr.addView(btn);
+            i++;
+        }
+
     }
 
 
@@ -234,7 +283,7 @@ public class ProfileActivity extends AppCompatActivity{
         public void onClick(View v) {
             // do something when the button is clicked
             // Yes we will handle click here but which button clicked??? We don't know
-            Intent i=new Intent(getApplicationContext(),sensorListActivity.class);
+            Intent i = new Intent(getApplicationContext(), sensorListActivity.class);
             startActivity(i);
         }
     };
@@ -244,7 +293,7 @@ public class ProfileActivity extends AppCompatActivity{
         profileList pl = new profileList("", "", "");
         String delims = "[ ]+";
         String[] tokens = line.split(delims);
-      //  for (int i = 0; i < tokens.length; i++)
+        //  for (int i = 0; i < tokens.length; i++)
         //    System.out.println(tokens[i]);
 
         pl.id = tokens[0];
@@ -256,9 +305,9 @@ public class ProfileActivity extends AppCompatActivity{
     }
 
     public static class profileList {
-        public  String id;
-        public  String type;
-        public  String list;
+        public String id;
+        public String type;
+        public String list;
 
         public profileList(String id, String type, String list) {
             this.id = id;
@@ -288,7 +337,7 @@ public class ProfileActivity extends AppCompatActivity{
         return json;
     }
 
-//    DataServices mServices;
+    //    DataServices mServices;
     boolean mBound = false;
 
 
@@ -311,14 +360,14 @@ public class ProfileActivity extends AppCompatActivity{
             //sample data
             Map<String, String> datalist = new HashMap<String, String>();
             datalist.put("messageID", "2");
-            Log.e("MessageID in PA","2");
+            Log.e("MessageID in PA", "2");
 //            String message = mDataService.convertToJSON(datalist);
 
             ICallBack callBack = new ICallBack() {
                 @Override
                 public void callBack(MessageType id, JSONObject jsonD) {
-                    if(jsonD != null) {
-                        Log.e("CallBack??worked??",jsonD + "");
+                    if (jsonD != null) {
+                        Log.e("CallBack??worked??", jsonD + "");
                     }
 
                 }
