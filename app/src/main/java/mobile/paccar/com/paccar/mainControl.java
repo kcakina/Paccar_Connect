@@ -36,11 +36,10 @@ public class mainControl extends ActionBarActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night Mode test
 
-        Intent newint = getIntent();
-        String address = newint.getStringExtra(DeviceList.EXTRA_DEVICE_ADDRESS); //receive the address of the bluetooth device
+       // Intent newint = getIntent();
+       // String address = newint.getStringExtra(DeviceList.EXTRA_DEVICE_ADDRESS); //receive the address of the bluetooth device
 
-        setContentView(R.layout.activity_profile);
-
+        //setContentView(R.layout.activity_profile);
         //call the widgtes
         btnOn = (Button)findViewById(R.id.button2);
         btnOff = (Button)findViewById(R.id.button3);

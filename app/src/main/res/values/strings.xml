@@ -10,7 +10,7 @@
     <string name="title_setting_list">Setting</string>
     <string name="title_setting_detail">Setting Detail</string>
     <string name="title_activity_sensor_detail_list">SensorDetailList</string>
-    <string name="none_paired"/>
+    <string name="none_paired" />
     <string name="profile_3">Profile 3</string>
     <string name="profile_1">Profile 1</string>
     <string name="profile_2">Profile 2</string>
@@ -34,5 +34,10 @@
     <string name="title_paired_devices">Paired Devices</string>
     <string name="title_other_devices">Other Available Devices</string>
     <string name="button_scan">Scan for devices</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_send_dummy_data">SendDummyData</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -81,7 +81,7 @@ public class MessageComm implements IDataReceivedCallBack {
             holder.MessageID = messageID;
             holder.JsonD = jsonD;
 
-            new getSensorDataTask().execute(holder);
+            new getSensorDataTask().execute(holder);/// this will go into a queue
 
         } catch (MalformedParameterizedTypeException e) {
             e.printStackTrace();
@@ -166,10 +166,10 @@ public class MessageComm implements IDataReceivedCallBack {
                 mostRecentSensorDataTime = getCurrentTime();
                 System.out.println(" In side of the while loop mostRecentSensorDataTime " + mostRecentSensorDataTime);
                 if(getSensorDataCallBack != null) {
-                    sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
-                    Log.e("DataServices","working");
+                    //sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
+                    //Log.e("DataServices","working");
                 } else{
-                    Log.e("DataServices","NOT working");
+                    //Log.e("DataServices","NOT working");
                 }
 
             }

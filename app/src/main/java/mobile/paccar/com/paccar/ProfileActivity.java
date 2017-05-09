@@ -104,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity{
 
 
     // SPP UUID service - this should work for most devices
-    private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final UUID BTMODULEUUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
 
     // String for MAC address
     private static String address;
@@ -288,7 +288,7 @@ public class ProfileActivity extends AppCompatActivity{
         return json;
     }
 
-//    DataServices mServices;
+    DataServices mServices;
     boolean mBound = false;
 
 

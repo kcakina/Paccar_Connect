@@ -51,6 +51,7 @@ public class sensorListActivity extends AppCompatActivity {
     SeverityLevel currentSeverityLevel;
 
     private Handler handler = new Handler();
+    /*
     private Runnable runnable = new Runnable(){
 
 
@@ -60,11 +61,12 @@ public class sensorListActivity extends AppCompatActivity {
             /*if(mServices != null)
             {
                 mServices.sendRequest(notificationCallBack, MessageType.GetNotifications, message);
-            }*/
+            }
             handler.postDelayed(this,1000);
 
         }
     };
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +80,8 @@ public class sensorListActivity extends AppCompatActivity {
         toolbar.setTitle(getTitle());
 
         //bluetooth
-//        Intent intent = new Intent(this, DataServices.class);
-//        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        Intent intent = new Intent(this, DataServices.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
         View recyclerView = findViewById(R.id.sensor_list);
         assert recyclerView != null;
@@ -162,7 +164,7 @@ public class sensorListActivity extends AppCompatActivity {
 
     }
 
-//    DataServices mServices;
+    DataServices mServices;
     boolean mBound = false;
 
 
@@ -172,13 +174,13 @@ public class sensorListActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
-            /*DataServices.LocalBinder binder = (DataServices.LocalBinder) service;
+            DataServices.LocalBinder binder = (DataServices.LocalBinder) service;
             mServices = binder.getService();
             if(mServices == null) {
                 Log.e("mServices in the PA","is null");
             } else {
                 Log.e("mServices in the PA","is not null");
-            }*/
+            }
             mBound = true;
             /*DataService mDataService = new DataService();
             //wire the
@@ -187,8 +189,8 @@ public class sensorListActivity extends AppCompatActivity {
 
             //sample data
             Map<String, String> datalist = new HashMap<String, String>();
-            datalist.put("messageID", "4");
-            Log.d("MessageID","4 + momo");
+            datalist.put("messageID", "3");
+            Log.d("MessageID","3 + momo");
 //            String message = mDataService.convertToJSON(datalist);
 
             ICallBack callBack = new ICallBack() {
