@@ -125,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        Button button = (Button) findViewById(R.id.Profile1);
+        /*Button button = (Button) findViewById(R.id.Profile1);
         Button button2 = (Button) findViewById(R.id.Profile2);
         Button button3 = (Button) findViewById(R.id.Profile3);
         button.setOnClickListener(mCorkyListener);
@@ -138,7 +138,7 @@ public class ProfileActivity extends AppCompatActivity {
         btnOff = (Button) findViewById(R.id.Profile3);
         txtString = (TextView) findViewById(R.id.textView2);
         txtStringLength = (TextView) findViewById(R.id.textView);
-
+*/
         //bluetooth
         Intent intent = new Intent(this, DataServices.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);

@@ -21,6 +21,15 @@ import android.widget.ListView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import mobile.paccar.com.paccar.dummy.DummyContent;
 
@@ -70,22 +79,36 @@ public class sensorDetailFragment extends Fragment {
         //day and night mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
+        GraphView line_graph = (GraphView) getActivity().findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> line_series =
+                new LineGraphSeries<DataPoint>(new DataPoint[] {
+                        new DataPoint(0, 1),
+                        new DataPoint(1, 5),
+                        new DataPoint(2, 3),
+                        new DataPoint(3, 2),
+                        new DataPoint(4, 6)
+                });
+        line_graph.addSeries(line_series);
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.sensor_detail, container, false);
-        View testView = null;
-        android.widget.ListView viewT = null;
-        //setHasOptionsMenu(true);
-        int fakeId = 0;
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-           viewT =  (ListView) (rootView.findViewById(R.id.sensor_list));
-            ((TextView) rootView.findViewById(R.id.sensor_detail)).setText(mItem.details);
+//        View testView = null;
+//        android.widget.ListView viewT = null;
+//        //setHasOptionsMenu(true);
+//        int fakeId = 0;
+//        // Show the dummy content as text in a TextView.
+//        if (mItem != null) {
+//           viewT =  (ListView) (rootView.findViewById(R.id.sensor_list));
+//            ((TextView) rootView.findViewById(R.id.sensor_detail)).setText(mItem.details);
+//
+//        }
 
-        }
+
 
         return rootView;
     }

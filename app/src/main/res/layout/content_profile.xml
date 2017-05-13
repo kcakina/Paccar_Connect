@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:text="Choose a profile to connect to:"
         android:id="@+id/textView2"
-        android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:layout_margin="60dp"
         android:textSize="30sp"/>
