@@ -210,48 +210,34 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (JSONException e) {e.printStackTrace();}*/
 
         // Creating buttons!
-        TableLayout profileTable;
-        TableRow tr = null;
-        String[] mTextofButton = { "D", "E", "I", "J", "L", "M", "G", "R", "N",
-                "T", "H", "P", "K", "Y", "V" };
+        LinearLayout layout = (LinearLayout) findViewById(R.id.linearlayout);
+        String[] mTextofButton = { "Perishables", "Non-perishables", "Frozen", "Furniture", "Electronics",
+                "Miscellaneous"};
+        int count = 0;
+        for (int i = 0; i < 3; i++) {
+            LinearLayout row = new LinearLayout(this);
+            row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        profileTable = (TableLayout) findViewById(R.id.profileTable); // Params specified in XML
 
-        int i = 0;
-        while (i < mTextofButton.length) { //Fix this so it reads in the number of profiles
-            if (i % 2 == 0) { // number of cols
-                tr = new TableRow(this);
-                profileTable.addView(tr);
+            for (int j = 0; j < 2; j++ ){
+                Button btnTag = new Button(this);
+                btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) btnTag.getLayoutParams();
+                params.setMargins(15, 15, 15, 20); //left, top, right, bottom
+                btnTag.setLayoutParams(params);
+                btnTag.setText(mTextofButton[count]); // set profile name
+                btnTag.setAllCaps(true); // Text to all caps
+                btnTag.setTextColor(getResources().getColor(R.color.textColorPrimaryNight)); // set text color
+                btnTag.setTextSize(20f); // Set text size
+                btnTag.setWidth(500);
+                btnTag.setHeight(120);
+                btnTag.setPadding(30, 30, 30, 30);
+                btnTag.setId(j);
+                row.addView(btnTag);
+                count++;
             }
-            Button btn = new Button(this);
-            btn.setTextColor(getResources().getColor(R.color.textColorPrimaryNight)); // set text color
-            btn.setText(mTextofButton[i]); // set profile name
-            btn.setAllCaps(true); // Text to all caps
-            btn.setTextSize(Float.parseFloat("20sp")); // Set text size
-            btn.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)); // Sets layout params
-            // add margins for greater space between buttons
-            btn.setWidth(200);
-            btn.setHeight(90);
-            btn.setId(i); // Sets Id for button
-            // btn.setPadding(30, 30, 30, 30); // left, top, right, bottom - Do they all need to be the same? height covers
-            ;
-            btn.setOnClickListener( new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    System.out.println("v.getid is:- " + v.getId());
-                    // Add link to home page? carries over correct profile data?
-                }
-            });
-
-            tr.setLayoutParams(new TableRow.LayoutParams(
-                    TableLayout.LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT));
-            tr.addView(btn);
-            i++;
+            layout.addView(row);
         }
 
     }
