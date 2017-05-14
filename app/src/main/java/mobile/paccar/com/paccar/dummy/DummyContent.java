@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 import mobile.paccar.com.paccar.DC_Profile;
 import mobile.paccar.com.paccar.DataSerialization;
-import mobile.paccar.com.paccar.ICallBack;
 import mobile.paccar.com.paccar.MessageType;
 
 /**
@@ -49,7 +48,7 @@ public class DummyContent {
     public DummyContent() {
         dataSerialization = new DataSerialization();
 
-        ICallBack callBack = new ICallBack() {
+       /* ICallBack callBack = new ICallBack() {
             @Override
             public void callBack(MessageType id, JSONObject jsonD) {
                 List<DC_Profile> list = dataSerialization.getProfileList(jsonD);
@@ -63,7 +62,7 @@ public class DummyContent {
                     Log.d("YourTag", "YourOutput");
                 }
             }
-        };
+        };*/
        // dataService.sendRequest(myContext, callBack, MessageType.GetProfileList, "");
 
     }

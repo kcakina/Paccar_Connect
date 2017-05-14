@@ -32,10 +32,6 @@ public class mainControl extends ActionBarActivity {
     {
         super.onCreate(savedInstanceState);
 
-        // Checks for day/night mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night Mode test
-
         Intent newint = getIntent();
         String address = newint.getStringExtra(DeviceList.EXTRA_DEVICE_ADDRESS); //receive the address of the bluetooth device
 

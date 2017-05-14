@@ -22,7 +22,7 @@ import java.util.Map;
 public class MessageComm implements IDataReceivedCallBack {
 
     private class DataHolder {
-        public ICallBack CallBack;
+        public IDataReceivedCallBack CallBack;
         public MessageType MessageID;
         public String JsonD;
     }
@@ -36,8 +36,8 @@ public class MessageComm implements IDataReceivedCallBack {
     private String notificationCount;
     private DataHolder currentMessage;
 
-    public ICallBack getSensorDataCallBack;
-    public ICallBack getNotificationCount;
+    public IDataReceivedCallBack getSensorDataCallBack;
+    public IDataReceivedCallBack getNotificationCount;
     private StringBuilder recDataString;
 
 
@@ -73,7 +73,7 @@ public class MessageComm implements IDataReceivedCallBack {
         return message;
     }
 
-    public void sendRequest(ICallBack callBack, MessageType messageID, String jsonD) {
+    public void sendRequest(IDataReceivedCallBack callBack, MessageType messageID, String jsonD) {
 
         try {
             DataHolder holder = new DataHolder();
@@ -113,10 +113,10 @@ public class MessageComm implements IDataReceivedCallBack {
 
             currentMessage = data;
         }
+    }
 
-        private void returnResponse(JSONObject jsonResponse) {
-            currentMessage.CallBack.callBack(currentMessage.MessageID, jsonResponse);
-        }
+    private void returnResponse(JSONObject jsonResponse) {
+        currentMessage.CallBack.DataReceived(currentMessage.MessageID, jsonResponse);
     }
 
     public void end(){
@@ -166,7 +166,7 @@ public class MessageComm implements IDataReceivedCallBack {
                 mostRecentSensorDataTime = getCurrentTime();
                 System.out.println(" In side of the while loop mostRecentSensorDataTime " + mostRecentSensorDataTime);
                 if(getSensorDataCallBack != null) {
-                    //sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
+//                    sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
                     //Log.e("DataServices","working");
                 } else{
                     //Log.e("DataServices","NOT working");
@@ -189,12 +189,39 @@ public class MessageComm implements IDataReceivedCallBack {
         }
     };
 
-    public void DataReceived(String message){
-        try {
-            JSONObject json = new JSONObject(message);
-            //returnResponse(json);
+    public void DataReceived(MessageType id, JSONObject jsonD){
+        //try {
+            //JSONObject json = new JSONObject(jsonD);
+            returnResponse(jsonD);
 
+        //} catch (JSONException e) {e.printStackTrace();}
+    }
+
+    public class OutputMessage
+    {
+        public MessageType _id;
+        public JSONObject _jsonD;
+
+        OutputMessage(MessageType id, JSONObject jsonD){
+            _id = id;
+            _jsonD = jsonD;
+        }
+    }
+
+    public OutputMessage convertToJson(String data){
+
+        JSONObject json = null;
+        MessageType id = MessageType.NotSet;
+
+        try {
+            json = new JSONObject(data);
+            int messageIdInt = json.getInt("MessageId");
+            id = MessageType.getMessage(messageIdInt);
         } catch (JSONException e) {e.printStackTrace();}
+
+        OutputMessage output = new OutputMessage(id,json);
+
+        return output;
     }
 
     private final Handler mHandler = new Handler() {
@@ -237,7 +264,11 @@ public class MessageComm implements IDataReceivedCallBack {
                             // make sure there is data before ~
                             String data = recDataString.substring(0, endOfLineIndex);    // extract string
                             //receivedDataCallback.DataReceived(data);
-                            DataReceived(data);
+
+                            OutputMessage output = convertToJson(data);
+
+                            DataReceived(output._id, output._jsonD);
+
                             recDataString.delete(0, endOfLineIndex);                    //clear all string data
                         }
 

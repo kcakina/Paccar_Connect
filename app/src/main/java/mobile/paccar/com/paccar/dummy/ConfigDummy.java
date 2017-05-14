@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 //import mobile.paccar.com.paccar.DataServices;
-import mobile.paccar.com.paccar.ICallBack;
+
 import mobile.paccar.com.paccar.MessageType;
 
 //import org.florescu.android.rangeseekbar.RangeSeekBar;
@@ -64,10 +64,10 @@ public class ConfigDummy {
 
         sendData = mJSONArray + "~";
 
-        ICallBack callBack = new ICallBack() {
+/*        ICallBack callBack = new ICallBack() {
             @Override
             public void callBack(MessageType id, JSONObject jsonD) {
-/*                       List<DC_Profile> list = dataService.getProfileList(jsonD);
+*//*                       List<DC_Profile> list = dataService.getProfileList(jsonD);
                         if(list != null) {
                             Log.d("YourTag", "YourOutput");
                             for (int i = 0; i < list.size(); i++) {
@@ -77,13 +77,13 @@ public class ConfigDummy {
                             }
                         } else {
                             Log.d("YourTag", "YourOutput");
-                        }*//*
+                        }*//**//*
             }
         };
         Log.e("Momo",sendData);
-        mServices.sendRequest(callBack, MessageType.GetProfileList, sendData);*/
+        mServices.sendRequest(callBack, MessageType.GetProfileList, sendData);*//*
             };
-        };
+        };*/
     }
 
     private static void addItem(SensorItem item) {

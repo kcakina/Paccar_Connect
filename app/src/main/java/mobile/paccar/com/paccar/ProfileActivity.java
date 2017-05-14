@@ -116,12 +116,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        // Checks for day/night mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Night Mode test
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
@@ -216,21 +210,25 @@ public class ProfileActivity extends AppCompatActivity {
         int count = 0;
         for (int i = 0; i < 3; i++) {
             LinearLayout row = new LinearLayout(this);
-            row.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            row.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
 
             for (int j = 0; j < 2; j++ ){
-                Button btnTag = new Button(this);
-                btnTag.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                Button btnTag = new Button(this); // create a new button
+                btnTag.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) btnTag.getLayoutParams();
                 params.setMargins(15, 15, 15, 20); //left, top, right, bottom
-                btnTag.setLayoutParams(params);
+                btnTag.setLayoutParams(params); // set button parameter
                 btnTag.setText(mTextofButton[count]); // set profile name
                 btnTag.setAllCaps(true); // Text to all caps
                 btnTag.setTextColor(getResources().getColor(R.color.textColorPrimaryNight)); // set text color
                 btnTag.setTextSize(20f); // Set text size
-                btnTag.setWidth(500);
-                btnTag.setHeight(120);
+                btnTag.setWidth(500); // button width
+                btnTag.setHeight(120); // button height
                 btnTag.setPadding(30, 30, 30, 30);
                 btnTag.setId(j);
                 row.addView(btnTag);
@@ -252,7 +250,6 @@ public class ProfileActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
     }
-
 
     @Override
     public void onStart() {
@@ -349,9 +346,9 @@ public class ProfileActivity extends AppCompatActivity {
             Log.e("MessageID in PA", "2");
 //            String message = mDataService.convertToJSON(datalist);
 
-            ICallBack callBack = new ICallBack() {
+            IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
                 @Override
-                public void callBack(MessageType id, JSONObject jsonD) {
+                public void DataReceived(MessageType id, JSONObject jsonD) {
                     if (jsonD != null) {
                         Log.e("CallBack??worked??", jsonD + "");
                     }

@@ -53,6 +53,12 @@ public class DataServices extends Service {
         messageComm.connect(address);
     }
 
+    public void setNotificationCountCallback(IDataReceivedCallBack notificationCallBack){
+    }
+
+    public void setSensorDataCallback(IDataReceivedCallBack getSensorDataCallBack) {
+    }
+
     //specific to Android service
     private final IBinder mBinder = new LocalBinder();
 

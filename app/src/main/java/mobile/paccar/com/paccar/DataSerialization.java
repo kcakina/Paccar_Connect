@@ -46,7 +46,7 @@ public class DataSerialization {
         return mJSONArray + "~";
     }
 
-    public void sendRequestTest(ICallBack callBack, MessageType messageId, String jsonD){
+    public void sendRequestTest(IDataReceivedCallBack callBack, MessageType messageId, String jsonD){
         //String jsonD: data in json format.
 
         JSONObject localdata = null;
@@ -67,7 +67,7 @@ public class DataSerialization {
 
         localdata = getJson(fileName);
 
-        callBack.callBack(messageId,localdata);
+        callBack.DataReceived(messageId,localdata);
     }
 
     public DC_NotificationCount getNotificationCount(JSONObject data) {

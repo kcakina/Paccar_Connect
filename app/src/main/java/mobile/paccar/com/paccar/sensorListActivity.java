@@ -46,8 +46,8 @@ public class sensorListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     String message;
-    ICallBack notificationCallBack;
-    ICallBack getSensorDataCallBack;
+    IDataReceivedCallBack notificationCallBack;
+    IDataReceivedCallBack getSensorDataCallBack;
     SeverityLevel currentSeverityLevel;
 
     private Handler handler = new Handler();
@@ -98,20 +98,20 @@ public class sensorListActivity extends AppCompatActivity {
         Log.e("MessageID","1");
         message = mDataSerialization.convertToJSON(datalist);
 
-        getSensorDataCallBack = new ICallBack() {
+        getSensorDataCallBack = new IDataReceivedCallBack() {
             @Override
-            public void callBack(MessageType id, JSONObject jsonD) {
+            public void DataReceived(MessageType id, JSONObject jsonD) {
                 //TODO send the data to addItem(),
                 Log.e("getSensorDataCallBack","WORKED!");
             }
         };
 
-        notificationCallBack = new ICallBack() {
+        notificationCallBack = new IDataReceivedCallBack() {
             @Override
-            public void callBack(MessageType id, JSONObject jsonD) {
+            public void DataReceived(MessageType id, JSONObject jsonD) {
                 Log.e("I'm in the CallBack","SLA");
-                DataSerialization myService = new DataSerialization();
-                DC_NotificationCount counts = myService.getNotificationCount(jsonD);
+                DataSerialization jsonSerializer = new DataSerialization();
+                DC_NotificationCount counts = jsonSerializer.getNotificationCount(jsonD);
 
 
                 if(counts.low > 0) {
@@ -182,10 +182,10 @@ public class sensorListActivity extends AppCompatActivity {
                 Log.e("mServices in the PA","is not null");
             }
             mBound = true;
-            /*DataService mDataService = new DataService();
+            //DataService mDataService = new DataService();
             //wire the
-            mServices.getNotificationCount = notificationCallBack;
-            mServices.getSensorDataCallBack = getSensorDataCallBack;*/
+            mServices.setNotificationCountCallback(notificationCallBack);
+            mServices.setSensorDataCallback(getSensorDataCallBack);
 
             //sample data
             Map<String, String> datalist = new HashMap<String, String>();
@@ -193,9 +193,9 @@ public class sensorListActivity extends AppCompatActivity {
             Log.d("MessageID","3 + momo");
 //            String message = mDataService.convertToJSON(datalist);
 
-            ICallBack callBack = new ICallBack() {
+            IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
                 @Override
-                public void callBack(MessageType id, JSONObject jsonD) {
+                public void DataReceived(MessageType id, JSONObject jsonD) {
                     Log.e("I'm in the CallBack","SLA");
                     DataSerialization myService = new DataSerialization();
                     List<DC_Notification> list = myService.getNotification(jsonD);
@@ -268,6 +268,13 @@ public class sensorListActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.menu_main, menu);
         MenuItem settingItems = menu.findItem(R.id.action_notification);
         setNotificationIcon(currentSeverityLevel,settingItems);
+
+
+        // Get the notifications MenuItem and LayerDrawable (layer-list)
+        //LayerDrawable icon = (LayerDrawable) item.getIcon();
+
+        // Update LayerDrawable's BadgeDrawable
+        //Utils2.setBadgeCount(this, icon, 2);
         return true;
     }
 
