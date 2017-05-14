@@ -10,11 +10,14 @@ public enum MessageType {
     GetSensorData(1),
     GetProfileList(2),
     GetSensorList(3),
+    GetNotificationCount(4),
     GetNotifications(5),
-    SaveSensorConfig(10),
+    IsConnected(6),
+    CreateProfile(7),
+    GetHistory(8),
     GetSensorConfig(9),
-    CreatProfile(7),
-    GetNotificationCount(4);
+    SaveSensorConfig(10);
+
 
     private int MessageIndex;
 

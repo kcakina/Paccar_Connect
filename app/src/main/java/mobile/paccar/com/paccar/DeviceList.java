@@ -24,6 +24,9 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.logging.Handler;
@@ -35,6 +38,8 @@ import android.widget.AdapterView.*;
 import android.widget.TextView;
 import android.content.Intent;
 import android.bluetooth.*;
+
+import org.json.JSONObject;
 
 
 public class DeviceList extends AppCompatActivity
@@ -119,6 +124,7 @@ public class DeviceList extends AppCompatActivity
             String noDevices = getResources().getText(R.string.none_paired).toString();
             pairedDevicesArrayAdapter.add(noDevices);
         }
+
     }
 
     @Override

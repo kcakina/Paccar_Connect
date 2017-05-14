@@ -46,6 +46,11 @@ public class DataServices extends Service {
     }
 
     public DataServices() {
+        messageComm = new MessageComm();
+    }
+
+    public void connect(String address){
+        messageComm.connect(address);
     }
 
     //specific to Android service
@@ -68,9 +73,9 @@ public class DataServices extends Service {
             Log.e("DataS, intent", "is null");
         } else {
             Log.e("DataS, intent", "is not null");
-            MessageComm messageComm = new MessageComm();
-            address = intent.getStringExtra(DeviceList.EXTRA_DEVICE_ADDRESS);
-            messageComm.connect(address);
+            //MessageComm messageComm = new MessageComm();
+            //address = intent.getStringExtra(DeviceList.EXTRA_DEVICE_ADDRESS);
+            //messageComm.connect(address);
         }
 
         Toast.makeText(getApplicationContext(), address, Toast.LENGTH_LONG).show();
