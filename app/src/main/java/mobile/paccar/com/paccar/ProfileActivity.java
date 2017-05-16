@@ -87,6 +87,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.UUID;
 
+
 public class ProfileActivity extends AppCompatActivity {
 
     Button getdata, update;
@@ -119,63 +120,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        /*Button button = (Button) findViewById(R.id.Profile1);
-        Button button2 = (Button) findViewById(R.id.Profile2);
-        Button button3 = (Button) findViewById(R.id.Profile3);
-        button.setOnClickListener(mCorkyListener);
-        button2.setOnClickListener(mCorkyListener);
-        button3.setOnClickListener(mCorkyListener);
-
-        //Link the buttons and textViews to respective views
-        btnOn = (Button) findViewById(R.id.Profile1);
-        btnOff = (Button) findViewById(R.id.Profile2);
-        btnOff = (Button) findViewById(R.id.Profile3);
-        txtString = (TextView) findViewById(R.id.textView2);
-        txtStringLength = (TextView) findViewById(R.id.textView);
-*/
         //bluetooth
         Intent intent = new Intent(this, DataServices.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-
         //end bluetooth
-        btnOff.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-/*
-                DataService mDataService = new DataService(getApplicationContext());
 
-                //sample data
-                Map<String, String> datalist = new HashMap<String, String>();
-                datalist.put("messageID", "5");
-                String message = mDataService.convertToJSON(datalist);
-
-                ICallBack callBack = new ICallBack() {
-                    @Override
-                    public void callBack(MessageType id, JSONObject jsonD) {
-                        if(jsonD != null) {
-                            Log.e("CallBack??worked??",jsonD + "");
-                        }
-
-                    }
-                };
-                Log.e("Momo message",message);
-
-                mServices.sendRequest(callBack, MessageType.GetProfileList, message);
-*/
-
-            }
-        });
-
-        btnOn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Map<String, String> datalist = new HashMap<String, String>();
-                //datalist.put("Message", "temp");
-                //datalist.put("MessageID", "2");
-                //datalist.put("SensorID", "5");
-
-                Intent i = new Intent(ProfileActivity.this, sensorListActivity.class);
-                startActivity(i);
-            }
-        });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -230,8 +179,9 @@ public class ProfileActivity extends AppCompatActivity {
                 btnTag.setWidth(500); // button width
                 btnTag.setHeight(120); // button height
                 btnTag.setPadding(30, 30, 30, 30);
-                btnTag.setId(j);
+                btnTag.setId(count);
                 row.addView(btnTag);
+                btnTag.setOnClickListener(getOnClickDoSomething(btnTag)); // Setting it up for each click
                 count++;
             }
 
@@ -240,6 +190,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    View.OnClickListener getOnClickDoSomething(final Button button)  {
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                //button.setText("text now set.. ");
+                // communicate with data hub
+            }
+        };
+    }
 
     @Override
     public void onResume() {
@@ -261,15 +219,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    // Create an anonymous implementation of OnClickListener
-    private View.OnClickListener mCorkyListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            // do something when the button is clicked
-            // Yes we will handle click here but which button clicked??? We don't know
-            Intent i = new Intent(getApplicationContext(), sensorListActivity.class);
-            startActivity(i);
-        }
-    };
 
     public String parsingType(String line) {
         String rt = "";

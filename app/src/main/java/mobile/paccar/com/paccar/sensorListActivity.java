@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -244,7 +245,6 @@ public class sensorListActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Intent i=new Intent(getApplicationContext(),SettingListActivity.class);
                 startActivity(i);
-
                 return true;
 
             case R.id.action_notification:
@@ -257,10 +257,11 @@ public class sensorListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    //adding the menu to senorbar.
+    //adding the menu to sensorbar.
     // Menu testing 1 2 3...1 2 3
+
+    int count = 0;
+    TextView txtViewCount;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -269,13 +270,38 @@ public class sensorListActivity extends AppCompatActivity {
         MenuItem settingItems = menu.findItem(R.id.action_notification);
         setNotificationIcon(currentSeverityLevel,settingItems);
 
+        // Adding badge to icon
+        final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
+        txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        updateHotCount(count);
+        // this is where the number is grabbed from the datahub. inputted into the updatehotcount
+//        Button button = (Button) findViewById(R.id.buttonpress);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                count++;
+//                updateHotCount(count);
+//            }
+//        });
 
-        // Get the notifications MenuItem and LayerDrawable (layer-list)
-        //LayerDrawable icon = (LayerDrawable) item.getIcon();
-
-        // Update LayerDrawable's BadgeDrawable
-        //Utils2.setBadgeCount(this, icon, 2);
         return true;
+    }
+
+    public void updateHotCount(final int new_hot_number) {
+        count = new_hot_number;
+        if (count < 0) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (count == 0)
+                    txtViewCount.setVisibility(View.GONE);
+                else {
+                    txtViewCount.setVisibility(View.VISIBLE);
+                    txtViewCount.setText(Integer.toString(count));
+                    sensorListActivity.this.invalidateOptionsMenu();
+                }
+            }
+        });
     }
 
 

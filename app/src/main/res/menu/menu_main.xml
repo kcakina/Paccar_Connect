@@ -13,6 +13,9 @@
         android:id="@+id/action_notification"
         android:title="@string/notifications"
         android:icon="@drawable/ic_action_notification"
+        android:menuCategory="secondary"
+        android:orderInCategory="1"
+        app:actionLayout="@layout/notification_layout"
         app:showAsAction="ifRoom" >
     </item>
 

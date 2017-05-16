@@ -108,12 +108,48 @@ public class SettingListActivity extends AppCompatActivity {
     }
 
     //adding the menu to senorbar.
+    int count = 0;
+    TextView txtViewCount;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_sensor, menu);
+        menuInflater.inflate(R.menu.menu_main, menu);
+        MenuItem settingItems = menu.findItem(R.id.action_notification);
+        //setNotificationIcon(currentSeverityLevel,settingItems);
+
+        // Adding badge to icon
+        final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
+        txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        updateHotCount(count);
+        // this is where the number is grabbed from the datahub. inputted into the updatehotcount
+//        Button button = (Button) findViewById(R.id.buttonpress);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                count++;
+//                updateHotCount(count);
+//            }
+//        });
 
         return true;
+    }
+
+    public void updateHotCount(final int new_hot_number) {
+        count = new_hot_number;
+        if (count < 0) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (count == 0)
+                    txtViewCount.setVisibility(View.GONE);
+                else {
+                    txtViewCount.setVisibility(View.VISIBLE);
+                    txtViewCount.setText(Integer.toString(count));
+                    SettingListActivity.this.invalidateOptionsMenu();
+                }
+            }
+        });
     }
 
 

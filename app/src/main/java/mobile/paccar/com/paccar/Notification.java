@@ -38,8 +38,6 @@ public class Notification extends AppCompatActivity {
 //         arrayAdapter =
 //                new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, notificationListAL);
 
-        //day and night mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
         //bluetooth
 //        Intent intent = new Intent(this, DataServices.class);
@@ -99,28 +97,7 @@ public class Notification extends AppCompatActivity {
             myService = new DataSerialization();
             final String json = myService.convertToJSON(datalist);
 
-           /* ICallBack callBack = new ICallBack() {
-                @Override
-                public void callBack(MessageType id, JSONObject jsonD) {
-                      List<DC_Notification> list = myService.getNotification(jsonD);
-                        if(list != null) {
-                            notificationListAL.clear();
-                            for (int i = 0; i < list.size(); i++) {
-                               String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
-                                notificationListAL.add(notificationItem);
-                                Log.e("notificationItem",notificationItem);
-                            }
-                            ListView listView = (ListView) findViewById(R.id.notificationlist);
-                            listView.setAdapter(arrayAdapter);
-                        } else {
-                            Log.d("YourTag", "YourOutput");
-                        }
-                }
 
-            };
-            Log.e("Momo",json);
-*/
-//            mServices.sendRequest(callBack, MessageType.GetNotifications, json);
         }
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
