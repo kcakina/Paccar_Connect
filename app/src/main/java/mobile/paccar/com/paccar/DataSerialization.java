@@ -24,7 +24,7 @@ import android.os.IBinder;
  * Created by shiyizhang on 4/29/16.
  */
 
-//Not from a jason file
+//Not from a json file
 
     //HIDDEN
 
@@ -37,14 +37,6 @@ public class DataSerialization {
     public DataSerialization() {
     }
 
-    public static String convertToJSON(Map<String, String> finalList) {
-
-        List<Map<String, String>> finalData = new ArrayList<>();
-        finalData.add(0, finalList);
-        JSONArray mJSONArray = new JSONArray(finalData);
-
-        return mJSONArray + "~";
-    }
 
     public void sendRequestTest(IDataReceivedCallBack callBack, MessageType messageId, String jsonD){
         //String jsonD: data in json format.

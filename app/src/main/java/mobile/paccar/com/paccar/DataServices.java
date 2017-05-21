@@ -83,12 +83,9 @@ public class DataServices extends Service {
             Log.e("DataS, intent", "is null");
         } else {
             Log.e("DataS, intent", "is not null");
-            //MessageComm messageComm = new MessageComm();
-            //address = intent.getStringExtra(DeviceList.EXTRA_DEVICE_ADDRESS);
-            //messageComm.connect(address);
         }
 
-        Toast.makeText(getApplicationContext(), address, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), address, Toast.LENGTH_LONG).show();
 
         return START_STICKY;
     }

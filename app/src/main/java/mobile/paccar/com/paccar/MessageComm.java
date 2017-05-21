@@ -47,7 +47,7 @@ public class MessageComm implements IDataReceivedCallBack {
 
     public MessageComm() {
         boss = new BluetoothBoss(mHandler);
-        sensorDataInputMessage = getSenosrDataInputMessage();
+        sensorDataInputMessage = getSensorDataInputMessage();
         notificationCount = getNotificationCountInputMessage();
         mostRecentSensorDataTime = getCurrentTime();
         mostRecentNotificationTime = getCurrentTime();
@@ -61,20 +61,16 @@ public class MessageComm implements IDataReceivedCallBack {
         boss.connect(address);
     }
 
-    private String getSenosrDataInputMessage() {
-        Map<String, String> datalist = new HashMap<String, String>();
-        datalist.put("messageID", "1");
-        Log.e("MessageID", "1");//get notification
-        String message = mDataSerialization.convertToJSON(datalist);
+    private String getSensorDataInputMessage() {
+        String message;
+        message = OutgoingJsonCreation.getSensorData();
 
         return message;
     }
 
     private String getNotificationCountInputMessage() {
-        Map<String, String> datalist = new HashMap<String, String>();
-        datalist.put("messageID", "4");
-        Log.e("MessageID", "4,DataServices");//notification count
-        String message = mDataSerialization.convertToJSON(datalist);
+        String message;
+        message = OutgoingJsonCreation.getNotificationCount();
 
         return message;
     }

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.view.Menu;
@@ -56,6 +57,9 @@ public class sensorListActivity extends AppCompatActivity {
     // DataModel list
     ArrayList<SensorListDataModel> dataModels;
     ListView listView;
+    LinearLayout mainHome;
+    TextView textViewName;
+    TextView textViewData;
     private static CustomAdapter adapter;
 
     private Handler handler = new Handler();
@@ -98,13 +102,13 @@ public class sensorListActivity extends AppCompatActivity {
         //day and night mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
-        DataSerialization mDataSerialization = new DataSerialization();
 
-        //sample data
-        Map<String, String> datalist = new HashMap<String, String>();
-        datalist.put("messageID", "1");
-        Log.e("MessageID","1");
-        message = mDataSerialization.convertToJSON(datalist);
+
+        //Get sensor data
+        String message;
+        message = OutgoingJsonCreation.getSensorData();
+
+
 
         getSensorDataCallBack = new IDataReceivedCallBack() {
             @Override
@@ -172,15 +176,37 @@ public class sensorListActivity extends AppCompatActivity {
 
         // Data List
         listView=(ListView)findViewById(R.id.list);
+        mainHome=(LinearLayout)findViewById(R.id.sensor_main);
+        textViewName=(TextView)findViewById(R.id.homeDis_SensorName);
+        textViewData=(TextView)findViewById(R.id.homeDis_SensorData);
 
         dataModels= new ArrayList<>();
 
         // Hard coded additions for testing
-        dataModels.add(new SensorListDataModel("Temp",     "1", "56F",  0, 0));
-        dataModels.add(new SensorListDataModel("Humidity", "2", "10F",  1, 1));
-        dataModels.add(new SensorListDataModel("Temp",     "3", "13F",  2, 3));
-        dataModels.add(new SensorListDataModel("Humidity", "4", "300C", 3, 2));
-        dataModels.add(new SensorListDataModel("Temp",     "5", "99F",  4, 1));
+        dataModels.add(new SensorListDataModel("Temp",     "1", "56 F",  0, 0));
+        dataModels.add(new SensorListDataModel("Humidity", "2", "10 F",  1, 1));
+        dataModels.add(new SensorListDataModel("Temp",     "3", "13 F",  2, 3));
+        dataModels.add(new SensorListDataModel("Humidity", "4", "300 C", 3, 2));
+        dataModels.add(new SensorListDataModel("Temp",     "5", "99F ",  4, 1));
+
+        // Main display of home screen
+        textViewName.setText(dataModels.get(0).getName());
+        textViewData.setText(dataModels.get(0).getCurrentData());
+
+        switch (dataModels.get(0).getSeverityStatus()) {
+            case 0:
+                mainHome.setBackgroundResource(R.drawable.no_severity_mainborder);
+                break;
+            case 1:
+                mainHome.setBackgroundResource(R.drawable.low_severity_mainborder);
+                break;
+            case 2:
+                mainHome.setBackgroundResource(R.drawable.medium_severity_mainborder);
+                break;
+            case 3:
+                mainHome.setBackgroundResource(R.drawable.high_severity_mainborder);
+                break;
+        }
 
         adapter= new CustomAdapter(dataModels,getApplicationContext());
 
@@ -211,7 +237,6 @@ public class sensorListActivity extends AppCompatActivity {
             mServices.setNotificationCountCallback(notificationCountCallBack);
             mServices.setSensorDataCallback(getSensorDataCallBack);
 
-            //sample data
 
             IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
                 @Override
@@ -233,9 +258,9 @@ public class sensorListActivity extends AppCompatActivity {
             };
             Log.e("Momo message",message);
 
-            Map<String, String> datalist = new HashMap<String, String>();
-            datalist.put("messageID", "1"); // Get sensor list
-            String message = DataSerialization.convertToJSON(datalist);
+            String message;
+
+            message = OutgoingJsonCreation.getSensorList();
 
             mServices.sendRequest(callBack, MessageType.GetSensorList, message);
         }

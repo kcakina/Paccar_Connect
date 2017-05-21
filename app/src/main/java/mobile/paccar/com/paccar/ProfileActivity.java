@@ -271,7 +271,7 @@ public class ProfileActivity extends AppCompatActivity {
         return json;
     }
 
-    //    DataServices mServices;
+    DataServices mServices;
     boolean mBound = false;
 
 
@@ -281,21 +281,15 @@ public class ProfileActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
-            /*DataServices.LocalBinder binder = (DataServices.LocalBinder) service;
+            DataServices.LocalBinder binder = (DataServices.LocalBinder) service;
             mServices = binder.getService();
             if(mServices == null) {
                 Log.e("mServices in the PA","is null");
             } else {
                 Log.e("mServices in the PA","is not null");
-            }*/
+            }
             mBound = true;
-//            DataService mDataService = new DataService();
 
-            //sample data
-            Map<String, String> datalist = new HashMap<String, String>();
-            datalist.put("messageID", "2");
-            Log.e("MessageID in PA", "2");
-//            String message = mDataService.convertToJSON(datalist);
 
             IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
                 @Override
@@ -308,7 +302,12 @@ public class ProfileActivity extends AppCompatActivity {
             };
 //            Log.e("Momo message",message);
 
-//            mServices.sendRequest(callBack, MessageType.GetProfileList, message);
+            //sample data
+            String message;
+
+            message = OutgoingJsonCreation.getProfileList();
+
+            mServices.sendRequest(callBack, MessageType.GetProfileList, message);
 
         }
 

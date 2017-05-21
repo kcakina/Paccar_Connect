@@ -1,5 +1,7 @@
 package mobile.paccar.com.paccar;
+
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
@@ -18,6 +20,10 @@ import java.util.Map;
 
 import android.view.Menu;
 
+import org.json.JSONObject;
+
+import mobile.paccar.com.paccar.common.logger.Log;
+
 public class Notification extends AppCompatActivity {
 
     DataSerialization myService;
@@ -29,7 +35,7 @@ public class Notification extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setTitle("NOTIFICATION Notification");
+        setTitle("Notifications");
         setContentView(R.layout.activity_notification);
         setContentView(R.layout.activity_sensor_detail_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -39,8 +45,8 @@ public class Notification extends AppCompatActivity {
 //                new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, notificationListAL);
 
         //bluetooth
-//        Intent intent = new Intent(this, DataServices.class);
-//        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        Intent intent = new Intent(this, DataServices.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
         // Get list of notifications
         //            Map<String, String> datalist = new HashMap<String, String>();
@@ -71,7 +77,51 @@ public class Notification extends AppCompatActivity {
 //            };
     }
 
-    private HashMap<String, String>createEmployee(String name,String number){
+    DataServices mServices;
+    boolean mBound = false;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            DataServices.LocalBinder binder = (DataServices.LocalBinder) service;
+            mServices = binder.getService();
+            if(mServices == null) {
+                android.util.Log.e("mServices in the PA","is null");
+            } else {
+                android.util.Log.e("mServices in the PA","is not null");
+            }
+            mBound = true;
+
+            IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
+                @Override
+                public void DataReceived(MessageType id, JSONObject jsonD) {
+                    if (jsonD != null) {
+                        android.util.Log.e("CallBack??worked??", jsonD + "");
+                    }
+
+                }
+            };
+//            Log.e("Momo message",message);
+
+            //sample data
+            String message;
+
+            message = OutgoingJsonCreation.getNotifications();
+
+            mServices.sendRequest(callBack, MessageType.GetNotifications, message);
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    private HashMap<String, String> createEmployee(String name, String number) {
         HashMap<String, String> employeeNameNo = new HashMap<String, String>();
         employeeNameNo.put(name, number);
         return employeeNameNo;
@@ -84,14 +134,14 @@ public class Notification extends AppCompatActivity {
 
             //setting icon should lead me to the setting page... but which page is the setting page?
             case R.id.action_settings:
-                Intent i=new Intent(getApplicationContext(),SettingListActivity.class);
+                Intent i = new Intent(getApplicationContext(), SettingListActivity.class);
                 startActivity(i);
                 return true;
 
             //link to the home page
             case R.id.action_home:
                 //  startActivity(new Intent(this, ));
-                startActivity(new Intent(this,sensorListActivity.class));
+                startActivity(new Intent(this, sensorListActivity.class));
                 return true;
 
         }
@@ -100,36 +150,8 @@ public class Notification extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.notification_menu,menu);
+        menuInflater.inflate(R.menu.notification_menu, menu);
         return true;
     }
-
-
-//    DataServices mServices;
-    boolean mBound = false;
-
-
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            Map<String, String> datalist = new HashMap<String, String>();
-            datalist.put("messageID", "5");
-
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-//            DataServices.LocalBinder binder = (DataServices.LocalBinder) service;
-//            mServices = binder.getService();
-            mBound = true;
-            myService = new DataSerialization();
-            final String json = myService.convertToJSON(datalist);
-
-
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
 }
 
