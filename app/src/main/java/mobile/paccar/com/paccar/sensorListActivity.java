@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 
 import mobile.paccar.com.paccar.dummy.DummyContent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,11 @@ public class sensorListActivity extends AppCompatActivity {
     IDataReceivedCallBack notificationCountCallBack;
     IDataReceivedCallBack getSensorDataCallBack;
     SeverityLevel currentSeverityLevel;
+
+    // DataModel list
+    ArrayList<SensorListDataModel> dataModels;
+    ListView listView;
+    private static CustomAdapter adapter;
 
     private Handler handler = new Handler();
     /*
@@ -163,6 +170,22 @@ public class sensorListActivity extends AppCompatActivity {
         }
         // runnable.run();
 
+        // Data List
+        listView=(ListView)findViewById(R.id.list);
+
+        dataModels= new ArrayList<>();
+
+        // Hard coded additions for testing
+        dataModels.add(new SensorListDataModel("Temp",     "1", "56F",  0, 0));
+        dataModels.add(new SensorListDataModel("Humidity", "2", "10F",  1, 1));
+        dataModels.add(new SensorListDataModel("Temp",     "3", "13F",  2, 3));
+        dataModels.add(new SensorListDataModel("Humidity", "4", "300C", 3, 2));
+        dataModels.add(new SensorListDataModel("Temp",     "5", "99F",  4, 1));
+
+        adapter= new CustomAdapter(dataModels,getApplicationContext());
+
+        listView.setAdapter(adapter);
+
     }
 
     DataServices mServices;
@@ -248,7 +271,6 @@ public class sensorListActivity extends AppCompatActivity {
                 //need notification page
                 startActivity(new Intent(this,Notification.class));
                 return true;
-
 
         }
         return super.onOptionsItemSelected(item);
