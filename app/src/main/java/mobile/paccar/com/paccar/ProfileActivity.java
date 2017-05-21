@@ -152,41 +152,6 @@ public class ProfileActivity extends AppCompatActivity {
             output.setText(data);
         } catch (JSONException e) {e.printStackTrace();}*/
 
-        // Creating buttons!
-        LinearLayout layout = (LinearLayout) findViewById(R.id.linearlayout);
-        String[] mTextofButton = { "Perishables", "Non-perishables", "Frozen", "Furniture", "Electronics",
-                "Miscellaneous"};
-        int count = 0;
-        for (int i = 0; i < 3; i++) {
-            LinearLayout row = new LinearLayout(this);
-            row.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-
-
-            for (int j = 0; j < 2; j++ ){
-                Button btnTag = new Button(this); // create a new button
-                btnTag.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT));
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) btnTag.getLayoutParams();
-                params.setMargins(15, 15, 15, 20); //left, top, right, bottom
-                btnTag.setLayoutParams(params); // set button parameter
-                btnTag.setText(mTextofButton[count]); // set profile name
-                btnTag.setAllCaps(true); // Text to all caps
-                btnTag.setTextColor(getResources().getColor(R.color.textColorPrimaryNight)); // set text color
-                btnTag.setTextSize(20f); // Set text size
-                btnTag.setWidth(500); // button width
-                btnTag.setHeight(120); // button height
-                btnTag.setPadding(30, 30, 30, 30);
-                btnTag.setId(count);
-                row.addView(btnTag);
-                btnTag.setOnClickListener(getOnClickDoSomething(btnTag)); // Setting it up for each click
-                count++;
-            }
-
-            layout.addView(row);
-        }
 
     }
 
@@ -195,7 +160,8 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //button.setText("text now set.. ");
                 // communicate with data hub & go to the next page
-
+                Intent i=new Intent(getApplicationContext(),SettingListActivity.class);
+                startActivity(i);
             }
         };
     }
@@ -222,38 +188,38 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    public String parsingType(String line) {
-        String rt = "";
-        profileList pl = new profileList("", "", "");
-        String delims = "[ ]+";
-        String[] tokens = line.split(delims);
-        //  for (int i = 0; i < tokens.length; i++)
-        //    System.out.println(tokens[i]);
+//    public String parsingType(String line) {
+//        String rt = "";
+//        profileList pl = new profileList("", "", "");
+//        String delims = "[ ]+";
+//        String[] tokens = line.split(delims);
+//        //  for (int i = 0; i < tokens.length; i++)
+//        //    System.out.println(tokens[i]);
+//
+//        pl.id = tokens[0];
+//        pl.type = tokens[1];
+//        pl.list = tokens[2];
+//        rt = pl.type;
+//
+//        return rt;
+//    }
 
-        pl.id = tokens[0];
-        pl.type = tokens[1];
-        pl.list = tokens[2];
-        rt = pl.type;
-
-        return rt;
-    }
-
-    public static class profileList {
-        public String id;
-        public String type;
-        public String list;
-
-        public profileList(String id, String type, String list) {
-            this.id = id;
-            this.type = type;
-            this.list = list;
-        }
-
-        @Override
-        public String toString() {
-            return type;
-        }
-    }
+//    public static class profileList {
+//        public String id;
+//        public String type;
+//        public String list;
+//
+//        public profileList(String id, String type, String list) {
+//            this.id = id;
+//            this.type = type;
+//            this.list = list;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return type;
+//        }
+//    }
 
     public String loadJSONFromAsset() {
         String json = null;
@@ -298,6 +264,12 @@ public class ProfileActivity extends AppCompatActivity {
                         Log.e("CallBack??worked??", jsonD + "");
                     }
 
+                    DataSerialization serializer = new DataSerialization();
+
+                    List<DC_Profile> list = serializer.getProfileList(jsonD);
+
+                    PopulateProfiles(list);
+
                 }
             };
 //            Log.e("Momo message",message);
@@ -316,5 +288,53 @@ public class ProfileActivity extends AppCompatActivity {
             mBound = false;
         }
     };
+
+    private void PopulateProfiles(List<DC_Profile> list) {
+        LinearLayout layout = (LinearLayout) findViewById(R.id.linearlayout);
+        //String[] mTextofButton = { "Perishables", "Non-perishables", "Frozen", "Furniture", "Electronics", "Miscellaneous"};
+
+        int count = list.size();
+
+        // How many rows
+        int numRows = Math.round(count / 2);
+
+        DC_Profile currentItem = null;
+
+        int index = 0;
+
+        for (int i = 0; i < numRows; i++) {
+
+            currentItem = list.get(index);
+
+            LinearLayout row = new LinearLayout(this);
+            row.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+
+            for (int j = 0; j < 2; j++ ){
+                Button btnTag = new Button(this); // create a new button
+                btnTag.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) btnTag.getLayoutParams();
+                params.setMargins(15, 15, 15, 20); //left, top, right, bottom
+                btnTag.setLayoutParams(params); // set button parameter
+                btnTag.setText(currentItem.name); // set profile name
+                btnTag.setAllCaps(true); // Text to all caps
+                btnTag.setTextColor(getResources().getColor(R.color.textColorPrimaryNight)); // set text color
+                btnTag.setTextSize(20f); // Set text size
+                btnTag.setWidth(500); // button width
+                btnTag.setHeight(120); // button height
+                btnTag.setPadding(30, 30, 30, 30);
+                btnTag.setId(currentItem.id); // button id
+                row.addView(btnTag);
+                btnTag.setOnClickListener(getOnClickDoSomething(btnTag)); // Setting it up for each click
+                index++;
+            }
+
+            layout.addView(row);
+        }
+    }
 
 }

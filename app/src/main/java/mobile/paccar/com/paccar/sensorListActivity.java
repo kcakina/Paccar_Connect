@@ -242,21 +242,36 @@ public class sensorListActivity extends AppCompatActivity {
                 @Override
                 public void DataReceived(MessageType id, JSONObject jsonD) {
                     Log.e("I'm in the CallBack","SLA");
-                    DataSerialization myService = new DataSerialization();
-                    List<DC_Notification> list = myService.getNotification(jsonD);
 
-                    for (int i = 0; i < list.size(); i++) {
-                        //String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
-                        //notificationListAL.add(notificationItem);
-                        if(list.get(i).severity == "HIGH") {
-                            //TODO DO NOT USE == to check String
-                            Log.e("notificationItem",list.get(i).severity);
-                            break;
-                        }
-                    }
+                    DataSerialization myService = new DataSerialization();
+
+                    List<DC_Sensor> list = myService.getSensorList(jsonD);
+
+
                 }
             };
             Log.e("Momo message",message);
+
+
+//            IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
+//                @Override
+//                public void DataReceived(MessageType id, JSONObject jsonD) {
+//                    Log.e("I'm in the CallBack","SLA");
+//                    DataSerialization myService = new DataSerialization();
+//                    List<DC_Notification> list = myService.getNotification(jsonD);
+//
+//                    for (int i = 0; i < list.size(); i++) {
+//                        //String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
+//                        //notificationListAL.add(notificationItem);
+//                        if(list.get(i).severity == "HIGH") {
+//                            //TODO DO NOT USE == to check String
+//                            Log.e("notificationItem",list.get(i).severity);
+//                            break;
+//                        }
+//                    }
+//                }
+//            };
+//            Log.e("Momo message",message);
 
             String message;
 

@@ -155,14 +155,16 @@ public class DataSerialization {
                 Log.d("YourTag", "YourOutput");
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                String id = jsonObject.optString("id").toString();
-                String name = jsonObject.optString("name").toString();
-                String type = jsonObject.optString("type").toString();;
+                int id = jsonObject.optInt("profileID");
+                String name = jsonObject.optString("profileName");
+                String type = jsonObject.optString("profileType");
+                boolean isActive = jsonObject.optBoolean("active");
 
                 profile = new DC_Profile();
                 profile.id = id;
                 profile.name = name;
                 profile.type = type;
+                profile.isActive = isActive;
 
                 list.add(profile);
             }
@@ -171,6 +173,48 @@ public class DataSerialization {
 
          return list;
         }
+
+
+    public List<DC_Sensor> getSensorList(JSONObject data) {
+        List<DC_Sensor> list = new ArrayList<DC_Sensor>();
+        DC_Sensor sensor = null;
+        //JSONObject data = null;
+        //data = sendRequest(MessageType.GetProfileList, "");
+
+        try {
+            Log.d("YourTag", "YourOutput");
+            //Get the instance of JSONArray that contains JSONObjects
+            JSONArray jsonArray = data.optJSONArray("Profile");
+
+            //Iterate the jsonArray and print the info of JSONObjects
+            for(int i=0; i < jsonArray.length(); i++){
+                Log.d("YourTag", "YourOutput");
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                String id = jsonObject.optString("sensorID");
+                String name = jsonObject.optString("sensorName");
+                String currentData = jsonObject.optString("sensorData");
+                Double upperThresh = jsonObject.optDouble("upperThreshold");
+                Double lowerThresh = jsonObject.optDouble("lowerThreshold");
+                int number = jsonObject.optInt("sensorNumber");
+                int severity = jsonObject.optInt("severity");
+
+                sensor = new DC_Sensor();
+                sensor.sensorId = id;
+                sensor.sensorName = name;
+                sensor.sensorData = currentData;
+                sensor.upperThreshold = upperThresh;
+                sensor.lowerThreshold = lowerThresh;
+                sensor.sensorNum = number;
+                sensor.sensorSeverity = severity;
+
+                list.add(sensor);
+            }
+
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return list;
+    }
 
 
 
