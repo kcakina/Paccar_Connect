@@ -194,7 +194,8 @@ public class ProfileActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             public void onClick(View v) {
                 //button.setText("text now set.. ");
-                // communicate with data hub
+                // communicate with data hub & go to the next page
+
             }
         };
     }
@@ -202,6 +203,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        // Need to do something for the notifications here.
     }
 
     @Override

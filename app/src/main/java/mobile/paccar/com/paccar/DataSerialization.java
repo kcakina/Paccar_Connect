@@ -37,7 +37,7 @@ public class DataSerialization {
     public DataSerialization() {
     }
 
-    public String convertToJSON(Map<String, String> finalList) {
+    public static String convertToJSON(Map<String, String> finalList) {
 
         List<Map<String, String>> finalData = new ArrayList<>();
         finalData.add(0, finalList);

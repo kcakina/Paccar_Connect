@@ -38,10 +38,37 @@ public class Notification extends AppCompatActivity {
 //         arrayAdapter =
 //                new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, notificationListAL);
 
-
         //bluetooth
 //        Intent intent = new Intent(this, DataServices.class);
 //        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
+        // Get list of notifications
+        //            Map<String, String> datalist = new HashMap<String, String>();
+//            datalist.put("messageID", "3");
+//            Log.d("MessageID","3 + momo");
+//            String message = mDataService.convertToJSON(datalist);
+
+//            IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
+//                @Override
+//                public void DataReceived(MessageType id, JSONObject jsonD) {
+//                    Log.e("I'm in the CallBack","SLA");
+//                    DataSerialization myService = new DataSerialization();
+//                    List<DC_Notification> list = myService.getNotification(jsonD);
+//               /*     if(jsonD != null) {
+//                        Log.e("CallBack??worked??",jsonD + "");
+//                    }*/
+//                   // Log.e("list size", list.size() + "");
+//                    for (int i = 0; i < list.size(); i++) {
+//                        //String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
+//                        //notificationListAL.add(notificationItem);
+//                        if(list.get(i).severity == "HIGH") {
+//                            //TODO DO NOT USE == to check String
+//                            Log.e("notificationItem",list.get(i).severity);
+//                            break;
+//                        }
+//                    }
+//                }
+//            };
     }
 
     private HashMap<String, String>createEmployee(String name,String number){

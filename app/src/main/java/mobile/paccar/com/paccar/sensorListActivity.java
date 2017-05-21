@@ -47,7 +47,7 @@ public class sensorListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     String message;
-    IDataReceivedCallBack notificationCallBack;
+    IDataReceivedCallBack notificationCountCallBack;
     IDataReceivedCallBack getSensorDataCallBack;
     SeverityLevel currentSeverityLevel;
 
@@ -107,7 +107,7 @@ public class sensorListActivity extends AppCompatActivity {
             }
         };
 
-        notificationCallBack = new IDataReceivedCallBack() {
+        notificationCountCallBack = new IDataReceivedCallBack() {
             @Override
             public void DataReceived(MessageType id, JSONObject jsonD) {
                 Log.e("I'm in the CallBack","SLA");
@@ -185,14 +185,10 @@ public class sensorListActivity extends AppCompatActivity {
             mBound = true;
             //DataService mDataService = new DataService();
             //wire the
-            mServices.setNotificationCountCallback(notificationCallBack);
+            mServices.setNotificationCountCallback(notificationCountCallBack);
             mServices.setSensorDataCallback(getSensorDataCallBack);
 
             //sample data
-            Map<String, String> datalist = new HashMap<String, String>();
-            datalist.put("messageID", "3");
-            Log.d("MessageID","3 + momo");
-//            String message = mDataService.convertToJSON(datalist);
 
             IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
                 @Override
@@ -200,10 +196,7 @@ public class sensorListActivity extends AppCompatActivity {
                     Log.e("I'm in the CallBack","SLA");
                     DataSerialization myService = new DataSerialization();
                     List<DC_Notification> list = myService.getNotification(jsonD);
-               /*     if(jsonD != null) {
-                        Log.e("CallBack??worked??",jsonD + "");
-                    }*/
-                   // Log.e("list size", list.size() + "");
+
                     for (int i = 0; i < list.size(); i++) {
                         //String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
                         //notificationListAL.add(notificationItem);
@@ -217,7 +210,11 @@ public class sensorListActivity extends AppCompatActivity {
             };
             Log.e("Momo message",message);
 
-//            mServices.sendRequest(callBack, MessageType.GetSensorList, message);
+            Map<String, String> datalist = new HashMap<String, String>();
+            datalist.put("messageID", "1"); // Get sensor list
+            String message = DataSerialization.convertToJSON(datalist);
+
+            mServices.sendRequest(callBack, MessageType.GetSensorList, message);
         }
         @Override
         public void onServiceDisconnected(ComponentName arg0) {

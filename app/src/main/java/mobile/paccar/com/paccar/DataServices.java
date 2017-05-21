@@ -59,6 +59,10 @@ public class DataServices extends Service {
     public void setSensorDataCallback(IDataReceivedCallBack getSensorDataCallBack) {
     }
 
+    public void sendRequest(IDataReceivedCallBack callBack, MessageType messageID, String jsonD){
+        messageComm.sendRequest(callBack,messageID,jsonD);
+    }
+
     //specific to Android service
     private final IBinder mBinder = new LocalBinder();
 

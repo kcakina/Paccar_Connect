@@ -56,7 +56,8 @@ public class BluetoothBoss {
     private static final String NAME_INSECURE = "BluetoothChatInsecure";
 
     // SPP UUID service - this should work for most devices
-    private static final UUID BTMODULEUUID = UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+    private static final UUID BTMODULEUUID =  UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
+            //UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
 
     // String for MAC address
     //private static String address;
@@ -517,6 +518,19 @@ public class BluetoothBoss {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
         }
+    }
+
+    public boolean isBluetoothConnected(){
+
+        boolean isConnected = false;
+
+        if (mState == STATE_CONNECTED){
+            isConnected = true;
+        } else {
+            isConnected = false;
+        }
+
+        return isConnected;
     }
 
 

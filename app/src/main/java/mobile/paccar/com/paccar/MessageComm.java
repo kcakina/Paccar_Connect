@@ -12,8 +12,10 @@ import org.json.JSONObject;
 
 import java.lang.reflect.MalformedParameterizedTypeException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by oshiancoates on 3/21/17.
@@ -35,6 +37,8 @@ public class MessageComm implements IDataReceivedCallBack {
     private String sensorDataInputMessage;
     private String notificationCount;
     private DataHolder currentMessage;
+    private LinkedBlockingQueue<DataHolder> OutMessageQueue;
+    boolean isWaitingMessageResponse;
 
     public IDataReceivedCallBack getSensorDataCallBack;
     public IDataReceivedCallBack getNotificationCount;
@@ -49,6 +53,8 @@ public class MessageComm implements IDataReceivedCallBack {
         mostRecentNotificationTime = getCurrentTime();
         runnable.run();
         recDataString = new StringBuilder();
+        OutMessageQueue = new LinkedBlockingQueue<>();
+        isWaitingMessageResponse = false;
     }
 
     public void connect(String address) {
@@ -81,42 +87,64 @@ public class MessageComm implements IDataReceivedCallBack {
             holder.MessageID = messageID;
             holder.JsonD = jsonD;
 
-            new getSensorDataTask().execute(holder);/// this will go into a queue
+            OutMessageQueue.add(holder);
+
+            //new getSensorDataTask().execute(holder);/// this will go into a queue
 
         } catch (MalformedParameterizedTypeException e) {
             e.printStackTrace();
         }
     }
 
-    private class getSensorDataTask extends AsyncTask<DataHolder, String, DataHolder> {
-        // this Integer below is the 3rd Integer in generic
-        // the Integer in argument is the 1st Integer in generic
-        @Override
-        protected DataHolder doInBackground(DataHolder... params) {
+    private void sendMessageToDatahub(){
+        // Find out if there is anything in the Queue
+        if ((!OutMessageQueue.isEmpty()) && (boss.isBluetoothConnected())) {
+            // If there is - are we already sending a message
+            if (isWaitingMessageResponse) {
+                // If we are - do nothing
+            } else {
+                // If not - get next message and send it
+                DataHolder item = null;
+                item = OutMessageQueue.poll();
 
-            DataHolder data = params[0];
-            boss.send(data.JsonD);
-
-            System.out.println("message In DataServices ?" + data.JsonD);
-            return data;
-        }
-
-        // why is this here
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(DataHolder data) {
-            super.onPostExecute(data);
-
-            currentMessage = data;
+                if (item != null){
+                    isWaitingMessageResponse = true;
+                    boss.send(item.JsonD);
+                }
+            }
         }
     }
 
+//    private class getSensorDataTask extends AsyncTask<DataHolder, String, DataHolder> {
+//        // this Integer below is the 3rd Integer in generic
+//        // the Integer in argument is the 1st Integer in generic
+//        @Override
+//        protected DataHolder doInBackground(DataHolder... params) {
+//
+//            DataHolder data = params[0];
+//            boss.send(data.JsonD);
+//
+//            System.out.println("message In DataServices ?" + data.JsonD);
+//            return data;
+//        }
+//
+//        // why is this here
+//        @Override
+//        protected void onProgressUpdate(String... values) {
+//            super.onProgressUpdate(values);
+//        }
+//
+//        @Override
+//        protected void onPostExecute(DataHolder data) {
+//            super.onPostExecute(data);
+//
+//            currentMessage = data;
+//        }
+//    }
+
     private void returnResponse(JSONObject jsonResponse) {
         currentMessage.CallBack.DataReceived(currentMessage.MessageID, jsonResponse);
+        isWaitingMessageResponse = false;
     }
 
     public void end(){
@@ -160,15 +188,20 @@ public class MessageComm implements IDataReceivedCallBack {
 
         public void run() {
             Log.e("runnnnnn","worked");
+
+            sendMessageToDatahub();
+
             if(checkSensorData(60L)){
                 java.util.Date date= new java.util.Date();
 
                 mostRecentSensorDataTime = getCurrentTime();
                 System.out.println(" In side of the while loop mostRecentSensorDataTime " + mostRecentSensorDataTime);
                 if(getSensorDataCallBack != null) {
-//                    sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
-                    //Log.e("DataServices","working");
-                } else{
+                    if (boss.isBluetoothConnected()) {
+//                        sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
+                        //Log.e("DataServices","working");
+                    }
+                } else {
                     //Log.e("DataServices","NOT working");
                 }
 
@@ -179,8 +212,10 @@ public class MessageComm implements IDataReceivedCallBack {
 
                 mostRecentNotificationTime = getCurrentTime();
                 if(getNotificationCount != null) {
-                    sendRequest(getNotificationCount,MessageType.GetNotificationCount,notificationCount);
-                    Log.e("getNotificationCount","working");
+                    if (boss.isBluetoothConnected()) {
+                        sendRequest(getNotificationCount, MessageType.GetNotificationCount, notificationCount);
+                        Log.e("getNotificationCount", "working");
+                    }
                 } else {
                     Log.e("getNotificationCount","not working");
                 }
