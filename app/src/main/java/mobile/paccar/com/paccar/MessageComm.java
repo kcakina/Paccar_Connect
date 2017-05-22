@@ -51,10 +51,12 @@ public class MessageComm implements IDataReceivedCallBack {
         notificationCount = getNotificationCountInputMessage();
         mostRecentSensorDataTime = getCurrentTime();
         mostRecentNotificationTime = getCurrentTime();
-        runnable.run();
+
         recDataString = new StringBuilder();
         OutMessageQueue = new LinkedBlockingQueue<>();
         isWaitingMessageResponse = false;
+
+        runnable.run();
     }
 
     public void connect(String address) {
@@ -94,18 +96,20 @@ public class MessageComm implements IDataReceivedCallBack {
 
     private void sendMessageToDatahub(){
         // Find out if there is anything in the Queue
-        if ((!OutMessageQueue.isEmpty()) && (boss.isBluetoothConnected())) {
-            // If there is - are we already sending a message
-            if (isWaitingMessageResponse) {
-                // If we are - do nothing
-            } else {
-                // If not - get next message and send it
-                DataHolder item = null;
-                item = OutMessageQueue.poll();
+        if (!OutMessageQueue.isEmpty()) {
+            if (boss.isBluetoothConnected()){
+                // If there is - are we already sending a message
+                if (isWaitingMessageResponse) {
+                    // If we are - do nothing
+                } else {
+                    // If not - get next message and send it
+                    DataHolder item = null;
+                    item = OutMessageQueue.poll();
 
-                if (item != null){
-                    isWaitingMessageResponse = true;
-                    boss.send(item.JsonD);
+                    if (item != null) {
+                        isWaitingMessageResponse = true;
+                        boss.send(item.JsonD);
+                    }
                 }
             }
         }
@@ -171,10 +175,10 @@ public class MessageComm implements IDataReceivedCallBack {
 
         if(sum < cTime) {
             shouldCheck = true;
-            Log.e("checkNotification","true");
-            System.out.println("sum " + sum + " cTime" + cTime + " checkNotification" + shouldCheck);
+//            Log.e("checkNotification","true");
+//            System.out.println("sum " + sum + " cTime" + cTime + " checkNotification" + shouldCheck);
         } else {
-            System.out.println("sum " + sum + " cTime" + cTime + " checkNotification" + shouldCheck);
+//            System.out.println("sum " + sum + " cTime" + cTime + " checkNotification" + shouldCheck);
         }
 
         return shouldCheck;
@@ -183,40 +187,42 @@ public class MessageComm implements IDataReceivedCallBack {
     private Runnable runnable = new Runnable(){
 
         public void run() {
-            Log.e("runnnnnn","worked");
+            //while (true) {
+//                Log.e("runnnnnn", "worked");
 
-            sendMessageToDatahub();
+                sendMessageToDatahub();
 
-            if(checkSensorData(60L)){
-                java.util.Date date= new java.util.Date();
+                if (checkSensorData(60L)) {
+                    java.util.Date date = new java.util.Date();
 
-                mostRecentSensorDataTime = getCurrentTime();
-                System.out.println(" In side of the while loop mostRecentSensorDataTime " + mostRecentSensorDataTime);
-                if(getSensorDataCallBack != null) {
-                    if (boss.isBluetoothConnected()) {
+                    mostRecentSensorDataTime = getCurrentTime();
+//                    System.out.println(" In side of the while loop mostRecentSensorDataTime " + mostRecentSensorDataTime);
+                    if (getSensorDataCallBack != null) {
+                        if (boss.isBluetoothConnected()) {
 //                        sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
-                        //Log.e("DataServices","working");
+                            //Log.e("DataServices","working");
+                        }
+                    } else {
+                        //Log.e("DataServices","NOT working");
                     }
-                } else {
-                    //Log.e("DataServices","NOT working");
+
                 }
+                if (checkNotification(30L)) {
+                    java.util.Date date = new java.util.Date();
+//                    System.out.println(new Timestamp(date.getTime()));
 
-            }
-            if(checkNotification(30L)){
-                java.util.Date date= new java.util.Date();
-                System.out.println(new Timestamp(date.getTime()));
-
-                mostRecentNotificationTime = getCurrentTime();
-                if(getNotificationCount != null) {
-                    if (boss.isBluetoothConnected()) {
-                        sendRequest(getNotificationCount, MessageType.GetNotificationCount, notificationCount);
-                        Log.e("getNotificationCount", "working");
+                    mostRecentNotificationTime = getCurrentTime();
+                    if (getNotificationCount != null) {
+                        if (boss.isBluetoothConnected()) {
+//                        sendRequest(getNotificationCount, MessageType.GetNotificationCount, notificationCount);
+                            Log.e("getNotificationCount", "working");
+                        }
+                    } else {
+//                        Log.e("getNotificationCount", "not working");
                     }
-                } else {
-                    Log.e("getNotificationCount","not working");
                 }
-            }
-            //handler.postDelayed(this,1000);
+                //handler.postDelayed(this,1000);
+            //}
         }
     };
 
@@ -287,7 +293,11 @@ public class MessageComm implements IDataReceivedCallBack {
                     //String readMessage = new String(readBuf, 0, msg.arg1); // this handles the "~"
                     //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                    // if (msg.what == handlerState) {        //if message is what we want
-                    String readMessage = (String) msg.obj;      // msg.arg1 = bytes from connect thread
+                    //String readMessage = (String) msg.obj;      // msg.arg1 = bytes from connect thread
+                    byte[] readBuf = (byte[]) msg.obj;
+                    // construct a string from the valid bytes in the buffer
+                    String readMessage = new String(readBuf, 0, msg.arg1); // this handles the "~"
+
                     recDataString.append(readMessage);         //keep appending to string until ~
                         int endOfLineIndex = recDataString.indexOf("~");             // determine the end-of-line
 

@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navigateMain(){
-        Intent sensorListIntent = new Intent(this, sensorListActivity.class);
+        Intent sensorListIntent = new Intent(this, ProfileActivity.class);
         startActivity(sensorListIntent);
     }
 

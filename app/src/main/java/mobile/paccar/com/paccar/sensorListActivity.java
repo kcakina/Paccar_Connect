@@ -89,15 +89,15 @@ public class sensorListActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        //toolbar.setTitle(getTitle());
 
         //bluetooth
         Intent intent = new Intent(this, DataServices.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
-        View recyclerView = findViewById(R.id.sensor_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+//        View recyclerView = findViewById(R.id.sensor_list);
+//        assert recyclerView != null;
+//        setupRecyclerView((RecyclerView) recyclerView);
 
         //day and night mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
@@ -213,7 +213,7 @@ public class sensorListActivity extends AppCompatActivity {
                     populateSensorList(list);
                 }
             };
-            Log.e("Momo message",message);
+//            Log.e("Momo message",message);
 
 
 //            IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
@@ -396,9 +396,9 @@ public class sensorListActivity extends AppCompatActivity {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
 
 
-        DummyContent dummy = new DummyContent();
-
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(dummy.ITEMS));
+//        DummyContent dummy = new DummyContent();
+//
+//        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(dummy.ITEMS));
     }
 
     public class SimpleItemRecyclerViewAdapter
