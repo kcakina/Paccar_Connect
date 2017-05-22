@@ -174,43 +174,6 @@ public class sensorListActivity extends AppCompatActivity {
         }
         // runnable.run();
 
-        // Data List
-        listView=(ListView)findViewById(R.id.list);
-        mainHome=(LinearLayout)findViewById(R.id.sensor_main);
-        textViewName=(TextView)findViewById(R.id.homeDis_SensorName);
-        textViewData=(TextView)findViewById(R.id.homeDis_SensorData);
-
-        dataModels= new ArrayList<>();
-
-        // Hard coded additions for testing
-        dataModels.add(new SensorListDataModel("Temp",     "1", "56 F",  0, 0));
-        dataModels.add(new SensorListDataModel("Humidity", "2", "10 F",  1, 1));
-        dataModels.add(new SensorListDataModel("Temp",     "3", "13 F",  2, 3));
-        dataModels.add(new SensorListDataModel("Humidity", "4", "300 C", 3, 2));
-        dataModels.add(new SensorListDataModel("Temp",     "5", "99F ",  4, 1));
-
-        // Main display of home screen
-        textViewName.setText(dataModels.get(0).getName());
-        textViewData.setText(dataModels.get(0).getCurrentData());
-
-        switch (dataModels.get(0).getSeverityStatus()) {
-            case 0:
-                mainHome.setBackgroundResource(R.drawable.no_severity_mainborder);
-                break;
-            case 1:
-                mainHome.setBackgroundResource(R.drawable.low_severity_mainborder);
-                break;
-            case 2:
-                mainHome.setBackgroundResource(R.drawable.medium_severity_mainborder);
-                break;
-            case 3:
-                mainHome.setBackgroundResource(R.drawable.high_severity_mainborder);
-                break;
-        }
-
-        adapter= new CustomAdapter(dataModels,getApplicationContext());
-
-        listView.setAdapter(adapter);
 
     }
 
@@ -247,7 +210,7 @@ public class sensorListActivity extends AppCompatActivity {
 
                     List<DC_Sensor> list = myService.getSensorList(jsonD);
 
-
+                    populateSensorList(list);
                 }
             };
             Log.e("Momo message",message);
@@ -284,6 +247,54 @@ public class sensorListActivity extends AppCompatActivity {
             mBound = false;
         }
     };
+
+    private void populateSensorList(List<DC_Sensor> list){
+
+
+
+        // Data List
+        listView=(ListView)findViewById(R.id.list);
+        mainHome=(LinearLayout)findViewById(R.id.sensor_main);
+        textViewName=(TextView)findViewById(R.id.homeDis_SensorName);
+        textViewData=(TextView)findViewById(R.id.homeDis_SensorData);
+
+        dataModels= new ArrayList<>();
+
+        // Hard coded additions for testing
+//        dataModels.add(new SensorListDataModel("Temp",     "1", "56 F",  0, 0));
+//        dataModels.add(new SensorListDataModel("Humidity", "2", "10 F",  1, 1));
+//        dataModels.add(new SensorListDataModel("Temp",     "3", "13 F",  2, 3));
+//        dataModels.add(new SensorListDataModel("Humidity", "4", "300 C", 3, 2));
+//        dataModels.add(new SensorListDataModel("Temp",     "5", "99F ",  4, 1));
+
+        for (DC_Sensor sensor : list) {
+            dataModels.add(new SensorListDataModel(sensor.sensorName, sensor.sensorId, sensor.sensorData,  sensor.sensorNum, sensor.sensorSeverity));
+        }
+
+        // Main display of home screen
+        textViewName.setText(dataModels.get(0).getName());
+        textViewData.setText(dataModels.get(0).getCurrentData());
+
+        switch (dataModels.get(0).getSeverityStatus()) {
+            case 0:
+                mainHome.setBackgroundResource(R.drawable.no_severity_mainborder);
+                break;
+            case 1:
+                mainHome.setBackgroundResource(R.drawable.low_severity_mainborder);
+                break;
+            case 2:
+                mainHome.setBackgroundResource(R.drawable.medium_severity_mainborder);
+                break;
+            case 3:
+                mainHome.setBackgroundResource(R.drawable.high_severity_mainborder);
+                break;
+        }
+
+        adapter= new CustomAdapter(dataModels,getApplicationContext());
+
+        listView.setAdapter(adapter);
+
+    }
 
 
     @Override

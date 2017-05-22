@@ -155,7 +155,7 @@ public class DataSerialization {
                 Log.d("YourTag", "YourOutput");
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                int id = jsonObject.optInt("profileID");
+                String id = jsonObject.optString("profileID");
                 String name = jsonObject.optString("profileName");
                 String type = jsonObject.optString("profileType");
                 boolean isActive = jsonObject.optBoolean("active");

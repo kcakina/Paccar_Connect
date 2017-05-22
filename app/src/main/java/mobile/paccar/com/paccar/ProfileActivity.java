@@ -327,7 +327,7 @@ public class ProfileActivity extends AppCompatActivity {
                 btnTag.setWidth(500); // button width
                 btnTag.setHeight(120); // button height
                 btnTag.setPadding(30, 30, 30, 30);
-                btnTag.setId(currentItem.id); // button id
+                btnTag.setId(Integer.getInteger(currentItem.id)); // button id
                 row.addView(btnTag);
                 btnTag.setOnClickListener(getOnClickDoSomething(btnTag)); // Setting it up for each click
                 index++;
