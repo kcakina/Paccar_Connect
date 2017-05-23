@@ -17,9 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
-/**
- * Created by oshiancoates on 3/21/17.
- */
 
 public class MessageComm implements IDataReceivedCallBack {
 
@@ -56,7 +53,9 @@ public class MessageComm implements IDataReceivedCallBack {
         OutMessageQueue = new LinkedBlockingQueue<>();
         isWaitingMessageResponse = false;
 
-        runnable.run();
+//        runnable.run();
+        thread.start();
+
     }
 
     public void connect(String address) {
@@ -109,6 +108,7 @@ public class MessageComm implements IDataReceivedCallBack {
                     if (item != null) {
                         isWaitingMessageResponse = true;
                         boss.send(item.JsonD);
+                        currentMessage = item;
                     }
                 }
             }
@@ -184,10 +184,12 @@ public class MessageComm implements IDataReceivedCallBack {
         return shouldCheck;
     }
 
-    private Runnable runnable = new Runnable(){
+    private Thread thread = new Thread() {
 
+        @Override
         public void run() {
-            //while (true) {
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+            while (true) {
 //                Log.e("runnnnnn", "worked");
 
                 sendMessageToDatahub();
@@ -222,9 +224,12 @@ public class MessageComm implements IDataReceivedCallBack {
                     }
                 }
                 //handler.postDelayed(this,1000);
-            //}
+            }
         }
     };
+
+
+
 
     public void DataReceived(MessageType id, JSONObject jsonD){
         //try {
@@ -252,7 +257,7 @@ public class MessageComm implements IDataReceivedCallBack {
 
         try {
             json = new JSONObject(data);
-            int messageIdInt = json.getInt("MessageId");
+            int messageIdInt = json.getInt("messageId");
             id = MessageType.getMessage(messageIdInt);
         } catch (JSONException e) {e.printStackTrace();}
 

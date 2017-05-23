@@ -72,7 +72,7 @@ public class DataSerialization {
         try {
             Log.d("Notification ", "Count");
             //Get the instance of JSONArray that contains JSONObjects
-            JSONArray jsonArray = data.optJSONArray("data");
+            JSONArray jsonArray = data.optJSONArray("messageID: 4");
 
 
             System.out.print(" jsonObject  " + jsonArray.toString());
@@ -112,7 +112,7 @@ public class DataSerialization {
         try {
             Log.d("YourTag", "YourOutput");
             //Get the instance of JSONArray that contains JSONObjects
-            JSONArray jsonArray = data.optJSONArray("data");
+            JSONArray jsonArray = data.optJSONArray("messageID: 5");
 
             //Iterate the jsonArray and print the info of JSONObjects
             for(int i=0; i < jsonArray.length(); i++){
@@ -148,7 +148,7 @@ public class DataSerialization {
         try {
             Log.d("YourTag", "YourOutput");
             //Get the instance of JSONArray that contains JSONObjects
-            JSONArray jsonArray = data.optJSONArray("Profile");
+            JSONArray jsonArray = data.optJSONArray("messageID: 2");
 
             //Iterate the jsonArray and print the info of JSONObjects
             for(int i=0; i < jsonArray.length(); i++){
@@ -184,7 +184,7 @@ public class DataSerialization {
         try {
             Log.d("YourTag", "YourOutput");
             //Get the instance of JSONArray that contains JSONObjects
-            JSONArray jsonArray = data.optJSONArray("Profile");
+            JSONArray jsonArray = data.optJSONArray("messageID: 3");
 
             //Iterate the jsonArray and print the info of JSONObjects
             for(int i=0; i < jsonArray.length(); i++){

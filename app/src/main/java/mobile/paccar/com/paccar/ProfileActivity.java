@@ -259,17 +259,28 @@ public class ProfileActivity extends AppCompatActivity {
 
             IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
                 @Override
-                public void DataReceived(MessageType id, JSONObject jsonD) {
-                    if (jsonD != null) {
-                        Log.e("CallBack??worked??", jsonD + "");
-                    }
+                public void DataReceived(MessageType id, final JSONObject jsonD) {
 
-                    DataSerialization serializer = new DataSerialization();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
 
-                    List<DC_Profile> list = serializer.getProfileList(jsonD);
+                            if (jsonD != null) {
+                                Log.e("CallBack??worked??", jsonD + "");
+                            } else {
+                                Log.e("JSON", "No JSON received");
+                            }
 
-                    PopulateProfiles(list);
+                            DataSerialization serializer = new DataSerialization();
 
+                            List<DC_Profile> list = serializer.getProfileList(jsonD);
+
+                            PopulateProfiles(list);
+
+                            Log.d("UI thread", "I am the UI thread");
+
+                        }
+
+                    });
                 }
             };
 //            Log.e("Momo message",message);
@@ -327,7 +338,7 @@ public class ProfileActivity extends AppCompatActivity {
                 btnTag.setWidth(500); // button width
                 btnTag.setHeight(120); // button height
                 btnTag.setPadding(30, 30, 30, 30);
-                btnTag.setId(Integer.getInteger(currentItem.id)); // button id
+                btnTag.setId(Integer.parseInt(currentItem.id)); // button id
                 row.addView(btnTag);
                 btnTag.setOnClickListener(getOnClickDoSomething(btnTag)); // Setting it up for each click
                 index++;

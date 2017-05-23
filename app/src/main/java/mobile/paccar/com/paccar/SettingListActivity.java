@@ -50,7 +50,7 @@ public class SettingListActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+//        toolbar.setTitle(getTitle());
 
         View recyclerView = findViewById(R.id.setting_list);
         assert recyclerView != null;
