@@ -60,22 +60,21 @@ public class sensorListActivity extends AppCompatActivity {
     private static SensorListAdapter adapter;
 
     private Handler handler = new Handler();
-    /*
-    private Runnable runnable = new Runnable(){
 
-
-        public void run() {
-            // findViewById(R.id.action_notificatio);
-            Log.e("runnnnnn","worked");
-            /*if(mServices != null)
-            {
-                mServices.sendRequest(notificationCallBack, MessageType.GetNotifications, message);
-            }
-            handler.postDelayed(this,1000);
-
-        }
-    };
-    */
+//    private Runnable runnable = new Runnable(){
+//
+//
+//        public void run() {
+//            // findViewById(R.id.action_notificatio);
+//            Log.e("runnnnnn","worked");
+//            /*if(mServices != null)
+//            {
+//                mServices.sendRequest(notificationCallBack, MessageType.GetNotifications, message);
+//            }
+//            handler.postDelayed(this,1000);
+//
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -300,9 +299,10 @@ public class sensorListActivity extends AppCompatActivity {
                     sensor.sensorNum, sensor.sensorSeverity, sensor.upperThreshold, sensor.lowerThreshold));
         }
 
+
         // Main display of home screen
         textViewName.setText(dataModels.get(0).getName());
-        textViewData.setText(dataModels.get(0).getCurrentData());
+        //textViewData.setText(dataModels.get(0).getCurrentData());
         textViewData.setId(Integer.parseInt(dataModels.get(0).getID()));
 
         switch (dataModels.get(0).getSeverityStatus()) {
@@ -334,12 +334,46 @@ public class sensorListActivity extends AppCompatActivity {
         for (DC_SensorData sensorData : list) {
             for (SensorListDataModel sensor : dataModels) {
                 if (sensor.getID().equalsIgnoreCase(sensorData.sensorId)) {
-                    sensor.currentData = sensorData.sensorData;
-                    sensor.sensorSeverity = sensorData.severity;  // Severity update
+                    sensor.currentData = sensorData.sensorData;         // Data update
+                    sensor.sensorSeverity = sensorData.sensorSeverity;  // Severity update
                 }
-
             }
         }
+
+
+        adapter.notifyDataSetChanged();
+        updateHomeMain(list);
+
+    }
+
+    private void updateHomeMain(List<DC_SensorData> list) {
+
+        // DOESN"T WORK GETTING NULL VALUE FOR textViewData.......Create a new text box for data...if null
+
+        mainHome=(LinearLayout)findViewById(R.id.sensor_main);
+        textViewName=(TextView)findViewById(R.id.homeDis_SensorName);
+        textViewData=(TextView)findViewById(R.id.homeDis_SensorData);
+
+        // Main display of home screen
+
+                textViewData.setText(list.get(0).sensorData);
+
+                switch (list.get(0).sensorSeverity) {
+                    case 0:
+                        mainHome.setBackgroundResource(R.drawable.no_severity_mainborder);
+                        break;
+                    case 1:
+                        mainHome.setBackgroundResource(R.drawable.low_severity_mainborder);
+                        break;
+                    case 2:
+                        mainHome.setBackgroundResource(R.drawable.medium_severity_mainborder);
+                        break;
+                    case 3:
+                        mainHome.setBackgroundResource(R.drawable.high_severity_mainborder);
+                        break;
+                }
+
+
 
     }
 

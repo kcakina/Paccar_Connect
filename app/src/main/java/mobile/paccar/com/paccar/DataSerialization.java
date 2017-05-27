@@ -242,7 +242,7 @@ public class DataSerialization {
                 sensorData = new DC_SensorData();
                 sensorData.sensorId = id;
                 sensorData.sensorData = currentData;
-                sensorData.severity = severity;
+                sensorData.sensorSeverity = severity;
 
 
                 list.add(sensorData);
