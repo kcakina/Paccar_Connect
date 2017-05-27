@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,9 +29,7 @@ import org.json.JSONObject;
 import mobile.paccar.com.paccar.dummy.DummyContent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * An activity representing a list of sensors. This activity
@@ -60,7 +57,7 @@ public class sensorListActivity extends AppCompatActivity {
     LinearLayout mainHome;
     TextView textViewName;
     TextView textViewData;
-    private static CustomAdapter adapter;
+    private static SensorListAdapter adapter;
 
     private Handler handler = new Handler();
     /*
@@ -99,22 +96,39 @@ public class sensorListActivity extends AppCompatActivity {
 //        assert recyclerView != null;
 //        setupRecyclerView((RecyclerView) recyclerView);
 
-        //day and night mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
-
 
 
         //Get sensor data
-        String message;
-        message = OutgoingJsonCreation.getSensorData();
-
+//        String message;
+//        message = OutgoingJsonCreation.getSensorData();
 
 
         getSensorDataCallBack = new IDataReceivedCallBack() {
             @Override
-            public void DataReceived(MessageType id, JSONObject jsonD) {
+            public void DataReceived(MessageType id, final JSONObject jsonD) {
                 //TODO send the data to addItem(),
                 Log.e("getSensorDataCallBack","WORKED!");
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        if (jsonD != null) {
+                            Log.e("CallBack??worked??", jsonD + "");
+                        } else {
+                            Log.e("JSON", "No JSON received");
+                        }
+
+                        DataSerialization serializer = new DataSerialization();
+
+                        List<DC_SensorData> list = serializer.getSensorData(jsonD);
+
+                        updateSensorData(list);
+
+                        Log.d("UI thread", "Give me data");
+
+                    }
+
+                });
             }
         };
 
@@ -162,7 +176,7 @@ public class sensorListActivity extends AppCompatActivity {
             }
         };
 
-        Log.e("Momo message",message);
+//        Log.e("Momo message",message);
 
         if (findViewById(R.id.sensor_detail_container) != null) {
             // The detail container view will be present only in the
@@ -195,24 +209,39 @@ public class sensorListActivity extends AppCompatActivity {
                 Log.e("mServices in the PA","is not null");
             }
             mBound = true;
-            //DataService mDataService = new DataService();
-            //wire the
+
+            //wire the callbacks
             mServices.setNotificationCountCallback(notificationCountCallBack);
             mServices.setSensorDataCallback(getSensorDataCallBack);
 
 
             IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
                 @Override
-                public void DataReceived(MessageType id, JSONObject jsonD) {
-                    Log.e("I'm in the CallBack","SLA");
+                public void DataReceived(MessageType id, final JSONObject jsonD) {
 
-                    DataSerialization myService = new DataSerialization();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
 
-                    List<DC_Sensor> list = myService.getSensorList(jsonD);
+                            if (jsonD != null) {
+                                Log.e("CallBack??worked??", jsonD + "");
+                            } else {
+                                Log.e("JSON", "No JSON received");
+                            }
 
-                    populateSensorList(list);
+                            DataSerialization serializer = new DataSerialization();
+
+                            List<DC_Sensor> list = serializer.getSensorList(jsonD);
+
+                            populateSensorList(list);
+
+                            Log.d("UI thread", "I am the UI thread");
+
+                        }
+
+                    });
                 }
             };
+
 //            Log.e("Momo message",message);
 
 
@@ -241,6 +270,7 @@ public class sensorListActivity extends AppCompatActivity {
             message = OutgoingJsonCreation.getSensorList();
 
             mServices.sendRequest(callBack, MessageType.GetSensorList, message);
+
         }
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
@@ -249,8 +279,6 @@ public class sensorListActivity extends AppCompatActivity {
     };
 
     private void populateSensorList(List<DC_Sensor> list){
-
-
 
         // Data List
         listView=(ListView)findViewById(R.id.list);
@@ -268,12 +296,14 @@ public class sensorListActivity extends AppCompatActivity {
 //        dataModels.add(new SensorListDataModel("Temp",     "5", "99F ",  4, 1));
 
         for (DC_Sensor sensor : list) {
-            dataModels.add(new SensorListDataModel(sensor.sensorName, sensor.sensorId, sensor.sensorData,  sensor.sensorNum, sensor.sensorSeverity));
+            dataModels.add(new SensorListDataModel(sensor.sensorType, sensor.sensorName, sensor.sensorId, sensor.sensorData,
+                    sensor.sensorNum, sensor.sensorSeverity, sensor.upperThreshold, sensor.lowerThreshold));
         }
 
         // Main display of home screen
         textViewName.setText(dataModels.get(0).getName());
         textViewData.setText(dataModels.get(0).getCurrentData());
+        textViewData.setId(Integer.parseInt(dataModels.get(0).getID()));
 
         switch (dataModels.get(0).getSeverityStatus()) {
             case 0:
@@ -290,12 +320,28 @@ public class sensorListActivity extends AppCompatActivity {
                 break;
         }
 
-        adapter= new CustomAdapter(dataModels,getApplicationContext());
+        adapter= new SensorListAdapter(dataModels,getApplicationContext());
 
         listView.setAdapter(adapter);
 
     }
 
+
+    private void updateSensorData(List<DC_SensorData> list){
+
+
+        // Updates the Current Values in the array to populate the home page
+        for (DC_SensorData sensorData : list) {
+            for (SensorListDataModel sensor : dataModels) {
+                if (sensor.getID().equalsIgnoreCase(sensorData.sensorId)) {
+                    sensor.currentData = sensorData.sensorData;
+                    sensor.sensorSeverity = sensorData.severity;  // Severity update
+                }
+
+            }
+        }
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class CustomAdapter extends ArrayAdapter<SensorListDataModel> implements View.OnClickListener{
+public class SensorListAdapter extends ArrayAdapter<SensorListDataModel> implements View.OnClickListener{
 
     private ArrayList<SensorListDataModel> dataSet;
     Context mContext;
@@ -24,7 +24,7 @@ public class CustomAdapter extends ArrayAdapter<SensorListDataModel> implements 
         TextView txtCurrentData;
     }
 
-    public CustomAdapter(ArrayList<SensorListDataModel> data, Context context) {
+    public SensorListAdapter(ArrayList<SensorListDataModel> data, Context context) {
         super(context, R.layout.row_item, data);
         this.dataSet = data;
         this.mContext=context;
@@ -34,10 +34,11 @@ public class CustomAdapter extends ArrayAdapter<SensorListDataModel> implements 
     @Override
     public void onClick(View v) {
 
-
         int position=(Integer) v.getTag();
         Object object= getItem(position);
         SensorListDataModel dataModel=(SensorListDataModel) object;
+
+        // go to sensor page?
 
     }
 
@@ -60,7 +61,6 @@ public class CustomAdapter extends ArrayAdapter<SensorListDataModel> implements 
             convertView = inflater.inflate(R.layout.row_item, parent, false);
             viewHolder.txtNumber = (TextView) convertView.findViewById(R.id.number);
             viewHolder.txtSensorName = (TextView) convertView.findViewById(R.id.sensor_name);
-            //viewHolder.txtCurrentData = (TextView) convertView.findViewById(R.id.current_data);
 
             TextView CurrentDataControl = (TextView) convertView.findViewById(R.id.current_data);
             viewHolder.txtCurrentData = CurrentDataControl;
@@ -80,10 +80,10 @@ public class CustomAdapter extends ArrayAdapter<SensorListDataModel> implements 
                     break;
             }
 
+            convertView.setTag(viewHolder);
 
             result=convertView;
 
-            convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
             result=convertView;
@@ -99,7 +99,7 @@ public class CustomAdapter extends ArrayAdapter<SensorListDataModel> implements 
         viewHolder.txtCurrentData.setText(dataModel.getCurrentData());
 
         // Return the completed view to render on screen
-        return convertView;
+        return result;
     }
 
 

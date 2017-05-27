@@ -2,25 +2,31 @@ package mobile.paccar.com.paccar;
 
 public class SensorListDataModel {
 
+    String sensorType;
     String sensorID;
     String sensorName;
     int sensorNumber;
     String currentData;
     int sensorSeverity;
+    double upperThreshold;
+    double lowerThreshold;
 
 
-    public SensorListDataModel(String name, String id, String current_data, int sensor_number, int severity) {
+
+    public SensorListDataModel(String sType, String name, String id, String current_data, int sensor_number, int severity,
+                               double upThresh, double lowThresh) {
+        this.sensorType=sType;
         this.sensorName=name;
         this.sensorID=id;
         this.currentData=current_data;
         this.sensorNumber=sensor_number;
         this.sensorSeverity=severity;
+        this.upperThreshold=upThresh;
+        this.lowerThreshold=lowThresh;
     }
 
 
-    public String getName() {
-        return sensorName;
-    }
+    public String getName() { return sensorName; }
 
 
     public String getID() {

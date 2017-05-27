@@ -66,8 +66,6 @@ public class sensorDetailActivity extends AppCompatActivity {
         //Log.e("I'm in the onCreate","in SDA, RUN?");
         //runnable.run();
 
-        //day and night mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
     }
 

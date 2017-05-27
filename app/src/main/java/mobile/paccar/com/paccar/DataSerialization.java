@@ -191,15 +191,17 @@ public class DataSerialization {
                 Log.d("YourTag", "YourOutput");
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
+                String type = jsonObject.optString("sensorType");
                 String id = jsonObject.optString("sensorID");
                 String name = jsonObject.optString("sensorName");
-                String currentData = jsonObject.optString("sensorData");
-                Double upperThresh = jsonObject.optDouble("upperThreshold");
-                Double lowerThresh = jsonObject.optDouble("lowerThreshold");
+                String currentData = jsonObject.optString("data");
+                Double upperThresh = jsonObject.optDouble("upperThresh");
+                Double lowerThresh = jsonObject.optDouble("lowerThresh");
                 int number = jsonObject.optInt("sensorNumber");
                 int severity = jsonObject.optInt("severity");
 
                 sensor = new DC_Sensor();
+                sensor.sensorType = type;
                 sensor.sensorId = id;
                 sensor.sensorName = name;
                 sensor.sensorData = currentData;
@@ -216,6 +218,40 @@ public class DataSerialization {
         return list;
     }
 
+
+    public List<DC_SensorData> getSensorData(JSONObject data) {
+        List<DC_SensorData> list = new ArrayList<DC_SensorData>();
+        DC_SensorData sensorData = null;
+        //JSONObject data = null;
+
+        try {
+            Log.d("YourTag", "YourOutput");
+            //Get the instance of JSONArray that contains JSONObjects
+            JSONArray jsonArray = data.optJSONArray("messageID: 1");
+
+            //Iterate the jsonArray and print the info of JSONObjects
+            for(int i=0; i < jsonArray.length(); i++){
+                Log.d("YourTag", "YourOutput");
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                String id = jsonObject.optString("sensorID");
+                String currentData = jsonObject.optString("data");
+                int severity = jsonObject.optInt("severity");
+
+
+                sensorData = new DC_SensorData();
+                sensorData.sensorId = id;
+                sensorData.sensorData = currentData;
+                sensorData.severity = severity;
+
+
+                list.add(sensorData);
+            }
+
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return list;
+    }
 
 
     private JSONObject getJson(String fileName) {

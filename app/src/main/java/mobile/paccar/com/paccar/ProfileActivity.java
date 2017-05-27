@@ -160,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //button.setText("text now set.. ");
                 // communicate with data hub & go to the next page
-                Intent i=new Intent(getApplicationContext(),SettingListActivity.class);
+                Intent i=new Intent(getApplicationContext(),sensorListActivity.class);
                 startActivity(i);
             }
         };
@@ -315,8 +315,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         for (int i = 0; i < numRows; i++) {
 
-            currentItem = list.get(index);
-
             LinearLayout row = new LinearLayout(this);
             row.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -324,6 +322,8 @@ public class ProfileActivity extends AppCompatActivity {
 
 
             for (int j = 0; j < 2; j++ ){
+                currentItem = list.get(index);
+
                 Button btnTag = new Button(this); // create a new button
                 btnTag.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,

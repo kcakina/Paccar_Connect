@@ -54,9 +54,12 @@ public class DataServices extends Service {
     }
 
     public void setNotificationCountCallback(IDataReceivedCallBack notificationCallBack){
+        messageComm.getNotificationCount = notificationCallBack;
     }
 
     public void setSensorDataCallback(IDataReceivedCallBack getSensorDataCallBack) {
+        messageComm.getSensorDataCallBack = getSensorDataCallBack;
+
     }
 
     public void sendRequest(IDataReceivedCallBack callBack, MessageType messageID, String jsonD){

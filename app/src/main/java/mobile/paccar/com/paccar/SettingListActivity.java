@@ -64,8 +64,6 @@ public class SettingListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        //day and night mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
     }
 
     @Override

@@ -53,7 +53,7 @@ public class MessageComm implements IDataReceivedCallBack {
         OutMessageQueue = new LinkedBlockingQueue<>();
         isWaitingMessageResponse = false;
 
-//        runnable.run();
+        // Start run
         thread.start();
 
     }
@@ -194,18 +194,18 @@ public class MessageComm implements IDataReceivedCallBack {
 
                 sendMessageToDatahub();
 
-                if (checkSensorData(60L)) {
+                if (checkSensorData(3L)) {
                     java.util.Date date = new java.util.Date();
 
                     mostRecentSensorDataTime = getCurrentTime();
 //                    System.out.println(" In side of the while loop mostRecentSensorDataTime " + mostRecentSensorDataTime);
                     if (getSensorDataCallBack != null) {
                         if (boss.isBluetoothConnected()) {
-//                        sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
-                            //Log.e("DataServices","working");
+                            sendRequest(getSensorDataCallBack,MessageType.GetSensorData,sensorDataInputMessage);
+                            Log.e("DataServices","working");
                         }
                     } else {
-                        //Log.e("DataServices","NOT working");
+                            Log.e("DataServices","NOT working");
                     }
 
                 }
@@ -315,7 +315,7 @@ public class MessageComm implements IDataReceivedCallBack {
 
                             DataReceived(output._id, output._jsonD);
 
-                            recDataString.delete(0, endOfLineIndex);                    //clear all string data
+                            recDataString.delete(0, (endOfLineIndex+1));                    //clear all string data
                         }
 
                     break;

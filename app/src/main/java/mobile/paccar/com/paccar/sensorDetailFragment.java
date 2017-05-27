@@ -76,8 +76,6 @@ public class sensorDetailFragment extends Fragment {
             }
         }
 
-        //day and night mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
     }
 
