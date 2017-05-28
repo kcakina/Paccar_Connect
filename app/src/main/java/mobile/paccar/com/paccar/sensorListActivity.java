@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,12 +97,6 @@ public class sensorListActivity extends AppCompatActivity {
 //        setupRecyclerView((RecyclerView) recyclerView);
 
 
-
-        //Get sensor data
-//        String message;
-//        message = OutgoingJsonCreation.getSensorData();
-
-
         getSensorDataCallBack = new IDataReceivedCallBack() {
             @Override
             public void DataReceived(MessageType id, final JSONObject jsonD) {
@@ -162,20 +157,19 @@ public class sensorListActivity extends AppCompatActivity {
                     sensorListActivity.this.invalidateOptionsMenu();
                 }
 
-/*               // Log.e("list size", counts.size() + "");
-                for (int i = 0; i < list.size(); i++) {
-                    //String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
-                    //notificationListAL.add(notificationItem);
-                    if(list.get(i).severity == "HIGH") {
-                        Log.e("notificationItem",list.get(i).severity);
-                        //TODO update the icon of notification, and invalidate the menu item.
-                        break;
-                    }
-                }*/
+//              // Log.e("list size", counts.size() + "");
+//                for (int i = 0; i < list.size(); i++) {
+//                    //String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
+//                    //notificationListAL.add(notificationItem);
+//                    if(list.get(i).severity == "HIGH") {
+//                        Log.e("notificationItem",list.get(i).severity);
+//                        //TODO update the icon of notification, and invalidate the menu item.
+//                        break;
+//                    }
+//                }
             }
         };
 
-//        Log.e("Momo message",message);
 
         if (findViewById(R.id.sensor_detail_container) != null) {
             // The detail container view will be present only in the
@@ -302,8 +296,7 @@ public class sensorListActivity extends AppCompatActivity {
 
         // Main display of home screen
         textViewName.setText(dataModels.get(0).getName());
-        //textViewData.setText(dataModels.get(0).getCurrentData());
-        textViewData.setId(Integer.parseInt(dataModels.get(0).getID()));
+        textViewData.setText(dataModels.get(0).getCurrentData());
 
         switch (dataModels.get(0).getSeverityStatus()) {
             case 0:
@@ -329,7 +322,6 @@ public class sensorListActivity extends AppCompatActivity {
 
     private void updateSensorData(List<DC_SensorData> list){
 
-
         // Updates the Current Values in the array to populate the home page
         for (DC_SensorData sensorData : list) {
             for (SensorListDataModel sensor : dataModels) {
@@ -340,7 +332,6 @@ public class sensorListActivity extends AppCompatActivity {
             }
         }
 
-
         adapter.notifyDataSetChanged();
         updateHomeMain(list);
 
@@ -348,31 +339,28 @@ public class sensorListActivity extends AppCompatActivity {
 
     private void updateHomeMain(List<DC_SensorData> list) {
 
-        // DOESN"T WORK GETTING NULL VALUE FOR textViewData.......Create a new text box for data...if null
-
-        mainHome=(LinearLayout)findViewById(R.id.sensor_main);
-        textViewName=(TextView)findViewById(R.id.homeDis_SensorName);
-        textViewData=(TextView)findViewById(R.id.homeDis_SensorData);
+        mainHome=(LinearLayout)findViewById(R.id.sensor_main);         // linear layout
+        textViewName=(TextView)findViewById(R.id.homeDis_SensorName);  // text view
+        textViewData=(TextView)findViewById(R.id.homeDis_SensorData);  // text view
 
         // Main display of home screen
 
-                textViewData.setText(list.get(0).sensorData);
+        textViewData.setText(list.get(1).sensorData);
 
-                switch (list.get(0).sensorSeverity) {
-                    case 0:
-                        mainHome.setBackgroundResource(R.drawable.no_severity_mainborder);
-                        break;
-                    case 1:
-                        mainHome.setBackgroundResource(R.drawable.low_severity_mainborder);
-                        break;
-                    case 2:
-                        mainHome.setBackgroundResource(R.drawable.medium_severity_mainborder);
-                        break;
-                    case 3:
-                        mainHome.setBackgroundResource(R.drawable.high_severity_mainborder);
-                        break;
-                }
-
+        switch (list.get(1).sensorSeverity) {
+            case 0:
+                mainHome.setBackgroundResource(R.drawable.no_severity_mainborder);
+                break;
+            case 1:
+                mainHome.setBackgroundResource(R.drawable.low_severity_mainborder);
+                break;
+            case 2:
+                mainHome.setBackgroundResource(R.drawable.medium_severity_mainborder);
+                break;
+            case 3:
+                mainHome.setBackgroundResource(R.drawable.high_severity_mainborder);
+                break;
+        }
 
 
     }
@@ -399,7 +387,7 @@ public class sensorListActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_notification:
-                //need notification page
+                // notification page
                 startActivity(new Intent(this,Notification.class));
                 return true;
 
@@ -472,14 +460,6 @@ public class sensorListActivity extends AppCompatActivity {
         }
     }
 
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-
-
-//        DummyContent dummy = new DummyContent();
-//
-//        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(dummy.ITEMS));
-    }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {

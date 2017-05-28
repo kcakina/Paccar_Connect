@@ -65,33 +65,32 @@ public class SettingDetailActivity extends AppCompatActivity {
                     .commit();
         }
 
-        /*{
-
-            seekBarInteger = (RangeSeekBar) findViewById(R.id.seekbar);
-            minTextInt = (TextView) findViewById(R.id.seekValuemin);
-            maxtextInt = (TextView) findViewById(R.id.seekValuemax);
-         *//*   seekBarDouble = (RangeSeekBar) findViewById(R.id.seekbarDouble);
-            minTextDouble = (TextView) findViewById(R.id.seekValueminDouble);
-            maxTextDouble = (TextView) findViewById(R.id.seekValuemaxDouble);
-*//*
-
-
-            seekBarInteger.setRangeValues(0, 30); // if we want to set progrmmatically set range of seekbar
-            seekBarInteger.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
-
-
-                @Override
-                public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                    Log.e("value", minValue + "  " + maxValue);
-                    minTextInt.setText("Min Value " + minValue);
-                    maxtextInt.setText("Max value " + maxValue);
-
-                }
-
-            });
-
-
-        }*/
+//        {
+//
+//            seekBarInteger = (RangeSeekBar) findViewById(R.id.seekbar);
+//            minTextInt = (TextView) findViewById(R.id.seekValuemin);
+//            maxtextInt = (TextView) findViewById(R.id.seekValuemax);
+//            seekBarDouble = (RangeSeekBar) findViewById(R.id.seekbarDouble);
+//            minTextDouble = (TextView) findViewById(R.id.seekValueminDouble);
+//            maxTextDouble = (TextView) findViewById(R.id.seekValuemaxDouble);
+//
+//
+//            seekBarInteger.setRangeValues(0, 30); // if we want to set progrmmatically set range of seekbar
+//            seekBarInteger.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+//
+//
+//                @Override
+//                public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+//                    Log.e("value", minValue + "  " + maxValue);
+//                    minTextInt.setText("Min Value " + minValue);
+//                    maxtextInt.setText("Max value " + maxValue);
+//
+//                }
+//
+//            });
+//
+//
+//        }
     }
 
 
@@ -106,11 +105,11 @@ public class SettingDetailActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
 
-/*           //link to the home page
+           //link to the home page
             case R.id.action_home:
                 //  startActivity(new Intent(this, ));
                 startActivity(new Intent(this,sensorListActivity.class));
-                return true;*/
+                return true;
 
             // Link to the notifications page
             case R.id.action_notification:
@@ -126,7 +125,7 @@ public class SettingDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main,menu);
+        menuInflater.inflate(R.menu.menu_device_list,menu);
 
         return true;
     }

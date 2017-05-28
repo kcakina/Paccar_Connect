@@ -1,6 +1,7 @@
 package mobile.paccar.com.paccar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class SensorListAdapter extends ArrayAdapter<SensorListDataModel> implements View.OnClickListener{
+public class SensorListAdapter extends ArrayAdapter<SensorListDataModel> {
 
     private ArrayList<SensorListDataModel> dataSet;
     Context mContext;
@@ -33,16 +34,18 @@ public class SensorListAdapter extends ArrayAdapter<SensorListDataModel> impleme
 
     }
 
-    @Override
-    public void onClick(View v) {
-
-        int position=(Integer) v.getTag();
-        Object object= getItem(position);
-        SensorListDataModel dataModel=(SensorListDataModel) object;
-
-        // go to sensor page?
-
-    }
+//    public void onClick(View v) {
+//
+////        int position=(Integer) v.getTag();
+////        Object object= getItem(position);
+////        SensorListDataModel dataModel=(SensorListDataModel) object;
+//
+//        // go to sensor page?
+//        Intent i=new Intent(v.getContext(), sensorDetailActivity.class);
+//        v.getContext().startActivity(i);
+//
+//
+//    }
 
     private int lastPosition = -1;
 
@@ -89,6 +92,15 @@ public class SensorListAdapter extends ArrayAdapter<SensorListDataModel> impleme
                 viewHolder.txtCurrentData.setBackgroundResource(R.drawable.high_severity_border);
                 break;
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(mContext, sensorDetailActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(i);
+            }
+        });
 
         convertView.setTag(viewHolder);
 
