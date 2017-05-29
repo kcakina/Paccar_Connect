@@ -93,14 +93,15 @@ public class SensorListAdapter extends ArrayAdapter<SensorListDataModel> {
                 break;
         }
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(mContext, sensorDetailActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(i);
-            }
-        });
+        // Set on click for individual sensor pages - not working...
+//        convertView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i=new Intent(mContext, sensorDetailActivity.class);
+//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                mContext.startActivity(i);
+//            }
+//        });
 
         convertView.setTag(viewHolder);
 

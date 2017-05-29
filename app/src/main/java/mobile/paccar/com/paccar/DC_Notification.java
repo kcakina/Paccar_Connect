@@ -10,8 +10,7 @@ public class DC_Notification {
     //,"messageID":5}
 
     String severity;
-    String value;
-    String sensorType;
-    String sensorID;
-    String times;
+    String data;
+    String sensorName;
+    String time;
 }

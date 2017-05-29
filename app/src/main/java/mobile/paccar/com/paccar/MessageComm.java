@@ -216,7 +216,7 @@ public class MessageComm implements IDataReceivedCallBack {
                     mostRecentNotificationTime = getCurrentTime();
                     if (getNotificationCount != null) {
                         if (boss.isBluetoothConnected()) {
-//                        sendRequest(getNotificationCount, MessageType.GetNotificationCount, notificationCount);
+                        sendRequest(getNotificationCount, MessageType.GetNotificationCount, notificationCount);
                             Log.e("getNotificationCount", "working");
                         }
                     } else {

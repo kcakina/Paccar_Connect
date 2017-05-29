@@ -81,11 +81,12 @@ public class sensorListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_list);
-        setTitle("HOME PAGE Sensor List Activity");
+
         currentSeverityLevel = SeverityLevel.NotSet;
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         //toolbar.setTitle(getTitle());
 
         //bluetooth
@@ -128,45 +129,28 @@ public class sensorListActivity extends AppCompatActivity {
 
         notificationCountCallBack = new IDataReceivedCallBack() {
             @Override
-            public void DataReceived(MessageType id, JSONObject jsonD) {
+            public void DataReceived(MessageType id, final JSONObject jsonD) {
                 Log.e("I'm in the CallBack","SLA");
-                DataSerialization jsonSerializer = new DataSerialization();
-                DC_NotificationCount counts = jsonSerializer.getNotificationCount(jsonD);
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        DataSerialization jsonSerializer = new DataSerialization();
+                        DC_NotificationCount counts = jsonSerializer.getNotificationCount(jsonD);
 
 
-                if(counts.low > 0) {
-                    Log.e("notificationItem","low");
-                    //TODO update the icon of notification, and invalidate the menu item.
-                    //this.invalidateOptionsMenu();
-                    currentSeverityLevel = SeverityLevel.Low;
-                    sensorListActivity.this.invalidateOptionsMenu();
+                        // Updating Notification icon
+                        updateNotificationIcon(counts);
 
-                }
+                        // Updating notification count
+                        int totalCount = counts.low + counts.medium + counts.high;
 
-                if(counts.medium > 0) {
-                    Log.e("notificationItem","medium");
-                    //TODO update the icon of notification, and invalidate the menu item.
-                    currentSeverityLevel = SeverityLevel.Medium;
-                    sensorListActivity.this.invalidateOptionsMenu();
-                }
+                        updateHotCount(totalCount);
 
-                if(counts.high > 0) {
-                    Log.e("notificationItem","high");
-                    //TODO update the icon of notification, and invalidate the menu item.
-                    currentSeverityLevel = SeverityLevel.High;
-                    sensorListActivity.this.invalidateOptionsMenu();
-                }
+                        Log.d("UI thread", "Give me notifications");
+                    }
 
-//              // Log.e("list size", counts.size() + "");
-//                for (int i = 0; i < list.size(); i++) {
-//                    //String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
-//                    //notificationListAL.add(notificationItem);
-//                    if(list.get(i).severity == "HIGH") {
-//                        Log.e("notificationItem",list.get(i).severity);
-//                        //TODO update the icon of notification, and invalidate the menu item.
-//                        break;
-//                    }
-//                }
+                });
             }
         };
 
@@ -411,16 +395,12 @@ public class sensorListActivity extends AppCompatActivity {
         // Adding badge to icon
         final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
         txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
-        updateHotCount(count);
+
         // this is where the number is grabbed from the datahub. inputted into the updatehotcount
-//        Button button = (Button) findViewById(R.id.buttonpress);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                count++;
-//                updateHotCount(count);
-//            }
-//        });
+
+
+        updateHotCount(count);
+
 
         return true;
     }
@@ -440,6 +420,39 @@ public class sensorListActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void updateNotificationIcon(DC_NotificationCount counts){
+
+        if (counts.low > 0) {
+
+            if ((counts.low > counts.medium) && (counts.low > counts.high)) {
+                Log.e("notificationItem", "low");
+                //TODO update the icon of notification, and invalidate the menu item.
+                //this.invalidateOptionsMenu();
+                currentSeverityLevel = SeverityLevel.Low;
+                sensorListActivity.this.invalidateOptionsMenu();
+            }
+
+        }
+
+        if (counts.medium > 0) {
+            if ((counts.medium >= counts.low) && (counts.medium > counts.high)) {
+                Log.e("notificationItem", "medium");
+                //TODO update the icon of notification, and invalidate the menu item.
+                currentSeverityLevel = SeverityLevel.Medium;
+                sensorListActivity.this.invalidateOptionsMenu();
+            }
+        }
+
+        if (counts.high > 0) {
+            if ((counts.high >= counts.low) && (counts.high >= counts.medium)) {
+                Log.e("notificationItem", "high");
+                //TODO update the icon of notification, and invalidate the menu item.
+                currentSeverityLevel = SeverityLevel.High;
+                sensorListActivity.this.invalidateOptionsMenu();
+            }
+        }
     }
 
 
@@ -473,7 +486,7 @@ public class sensorListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.sensor_list_content, parent, false);
+                    .inflate(R.layout.sensor_list, parent, false);
             return new ViewHolder(view);
         }
 

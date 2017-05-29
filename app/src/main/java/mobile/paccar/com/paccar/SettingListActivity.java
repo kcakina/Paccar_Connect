@@ -45,11 +45,11 @@ public class SettingListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("SETTING PAGE Setting List Activity");
         setContentView(R.layout.activity_setting_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        toolbar.setTitle(getTitle());
 
         View recyclerView = findViewById(R.id.setting_list);
@@ -82,17 +82,12 @@ public class SettingListActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-            //setting icon should lead me to the setting page... but which page is the setting page?
-            case R.id.action_settings:
-                Intent i=new Intent(getApplicationContext(),SettingListActivity.class);
-                startActivity(i);
-
-                return true;
-
             //link to the home page
             case R.id.action_home:
                 //  startActivity(new Intent(this, ));
-                startActivity(new Intent(this,sensorListActivity.class));
+                Intent i=new Intent(getApplicationContext(),sensorListActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
                 return true;
 
             case R.id.action_notification:
@@ -105,20 +100,20 @@ public class SettingListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //adding the menu to senorbar.
+    //adding the menu to sensorbar.
     int count = 0;
     TextView txtViewCount;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.menu_sensor, menu);
         MenuItem settingItems = menu.findItem(R.id.action_notification);
         //setNotificationIcon(currentSeverityLevel,settingItems);
 
         // Adding badge to icon
-        final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
-        txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        final View notifications = menu.findItem(R.id.action_notification).getActionView();
+        txtViewCount = (TextView) notifications.findViewById(R.id.txtCount);
         updateHotCount(count);
         // this is where the number is grabbed from the datahub. inputted into the updatehotcount
 //        Button button = (Button) findViewById(R.id.buttonpress);

@@ -119,16 +119,16 @@ public class DataSerialization {
                 Log.d("YourTag", "YourOutput");
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                String severity = jsonObject.optString("severity").toString();
-                String value = jsonObject.optString("value").toString();
-                String sensorType = jsonObject.optString("sensorType").toString();
-                String sensorID = jsonObject.optString("sensorID").toString();
+                String severity = jsonObject.optString("severity");
+                String sensorData = jsonObject.optString("data");
+                String sensorName = jsonObject.optString("name");
+                String notificationTime = jsonObject.optString("time");
 
                 notification = new DC_Notification();
                 notification.severity = severity;
-                notification.value = value;
-                notification.sensorType = sensorType;
-                notification.sensorID = sensorID;
+                notification.data = sensorData;
+                notification.sensorName = sensorName;
+                notification.time = notificationTime;
 
                 listNotification.add(notification);
             }
