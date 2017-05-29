@@ -114,16 +114,10 @@ public class SettingListActivity extends AppCompatActivity {
         // Adding badge to icon
         final View notifications = menu.findItem(R.id.action_notification).getActionView();
         txtViewCount = (TextView) notifications.findViewById(R.id.txtCount);
+
         updateHotCount(count);
         // this is where the number is grabbed from the datahub. inputted into the updatehotcount
-//        Button button = (Button) findViewById(R.id.buttonpress);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                count++;
-//                updateHotCount(count);
-//            }
-//        });
+
 
         return true;
     }

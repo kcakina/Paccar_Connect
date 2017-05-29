@@ -4,10 +4,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
@@ -362,6 +364,11 @@ public class sensorListActivity extends AppCompatActivity {
 //            navigateUpTo(new Intent(this, sensorListActivity.class));
 //            return true;
 //        }
+
+        Menu menu = null;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
         switch (item.getItemId()) {
 
             //setting icon should lead me to the setting page... but which page is the setting page?
@@ -372,33 +379,56 @@ public class sensorListActivity extends AppCompatActivity {
 
             case R.id.action_notification:
                 // notification page
-                startActivity(new Intent(this,Notification.class));
+                i=new Intent(getApplicationContext(),Notification.class);
+                startActivity(i);
                 return true;
 
         }
+
+        final MenuItem mItem = menu.findItem(R.id.notification_icon);
+        mItem.getActionView().setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(),Notification.class);
+                startActivity(i);
+            }
+        });
+
         return super.onOptionsItemSelected(item);
     }
 
     //adding the menu to sensorbar.
     // Menu testing 1 2 3...1 2 3
 
-    int count = 0;
     TextView txtViewCount;
+    int count = 0;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
-        MenuItem settingItems = menu.findItem(R.id.action_notification);
-        setNotificationIcon(currentSeverityLevel,settingItems);
+
+        // Doesn't work/either this or the badge
+        //MenuItem notificationIcon = menu.findItem(R.id.action_notification);
+        //setNotificationIcon(currentSeverityLevel,notificationIcon);
 
         // Adding badge to icon
-        final View notificaitons = menu.findItem(R.id.action_notification).getActionView();
-        txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
-
-        // this is where the number is grabbed from the datahub. inputted into the updatehotcount
+        final View notifications = menu.findItem(R.id.action_notification).getActionView();
+        txtViewCount = (TextView) notifications.findViewById(R.id.txtCount);
 
 
+//        final MenuItem notificationIcon = menu.findItem(R.id.action_notification);
+//
+//        notificationIcon.getActionView().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onOptionsItemSelected(notificationIcon);
+//            }
+//        });
+
+
+        //initialize notification count
         updateHotCount(count);
 
 
@@ -424,14 +454,12 @@ public class sensorListActivity extends AppCompatActivity {
 
     public void updateNotificationIcon(DC_NotificationCount counts){
 
+
         if (counts.low > 0) {
 
             if ((counts.low > counts.medium) && (counts.low > counts.high)) {
                 Log.e("notificationItem", "low");
-                //TODO update the icon of notification, and invalidate the menu item.
-                //this.invalidateOptionsMenu();
                 currentSeverityLevel = SeverityLevel.Low;
-                sensorListActivity.this.invalidateOptionsMenu();
             }
 
         }
@@ -439,39 +467,39 @@ public class sensorListActivity extends AppCompatActivity {
         if (counts.medium > 0) {
             if ((counts.medium >= counts.low) && (counts.medium > counts.high)) {
                 Log.e("notificationItem", "medium");
-                //TODO update the icon of notification, and invalidate the menu item.
                 currentSeverityLevel = SeverityLevel.Medium;
-                sensorListActivity.this.invalidateOptionsMenu();
             }
         }
 
         if (counts.high > 0) {
             if ((counts.high >= counts.low) && (counts.high >= counts.medium)) {
                 Log.e("notificationItem", "high");
-                //TODO update the icon of notification, and invalidate the menu item.
                 currentSeverityLevel = SeverityLevel.High;
-                sensorListActivity.this.invalidateOptionsMenu();
             }
         }
+
+        invalidateOptionsMenu();
     }
 
 
-    public void setNotificationIcon(SeverityLevel level, MenuItem menuItem) {
-
-        switch (level) {
-            case Low:
-                menuItem.setIcon(R.drawable.ic_action_lnotification);
-                break;
-
-            case Medium:
-                menuItem.setIcon(R.drawable.ic_action_mnotification);
-                break;
-
-            case High:
-                menuItem.setIcon(R.drawable.ic_action_hnotification);
-                break;
-        }
-    }
+//    public void setNotificationIcon(SeverityLevel level, MenuItem menuItem) {
+//
+//
+//        switch (level) {
+//            case Low:
+//                menuItem.setIcon(R.drawable.ic_action_lnotification);
+//                break;
+//
+//            case Medium:
+//                menuItem.setIcon(R.drawable.ic_action_mnotification);
+//                break;
+//
+//            case High:
+//                menuItem.setIcon(R.drawable.ic_action_hnotification);
+////                menuItem.setImageResource(R.drawable.ic_action_hnotification);
+//                break;
+//        }
+//    }
 
 
     public class SimpleItemRecyclerViewAdapter

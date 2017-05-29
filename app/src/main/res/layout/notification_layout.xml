@@ -7,22 +7,23 @@
     android:background="@android:color/transparent"
     android:clickable="true"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/notification_icon">
 
     <ImageView
-        android:id="@+id/hotlist_bell"
+        android:id="@+id/action_notification_badge"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_margin="0dp"
         android:contentDescription="Notification Icon"
         android:gravity="center"
-        android:src="@drawable/ic_action_lnotification" />
+        android:src="@drawable/ic_action_notification" />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/txtCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="0dp"
         android:background="@drawable/ic_action_badge"

@@ -16,9 +16,13 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.view.Menu;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -26,55 +30,27 @@ import mobile.paccar.com.paccar.common.logger.Log;
 
 public class Notification extends AppCompatActivity {
 
-    DataSerialization myService;
-    ArrayAdapter<String> arrayAdapter;
-    ArrayList<String> notificationListAL = new ArrayList<String>();
+    // DataModel list
+    ArrayList<NotificationListDataModel> dataModels;
+    ListView listView;
+
+    private static NotificationListAdapter adapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setTitle("Notifications");
         setContentView(R.layout.activity_notification);
         setContentView(R.layout.activity_sensor_detail_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//         arrayAdapter =
-//                new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, notificationListAL);
 
         //bluetooth
         Intent intent = new Intent(this, DataServices.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
-        // Get list of notifications
-        //            Map<String, String> datalist = new HashMap<String, String>();
-//            datalist.put("messageID", "3");
-//            Log.d("MessageID","3 + momo");
-//            String message = mDataService.convertToJSON(datalist);
-
-//            IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
-//                @Override
-//                public void DataReceived(MessageType id, JSONObject jsonD) {
-//                    Log.e("I'm in the CallBack","SLA");
-//                    DataSerialization myService = new DataSerialization();
-//                    List<DC_Notification> list = myService.getNotification(jsonD);
-//               /*     if(jsonD != null) {
-//                        Log.e("CallBack??worked??",jsonD + "");
-//                    }*/
-//                   // Log.e("list size", list.size() + "");
-//                    for (int i = 0; i < list.size(); i++) {
-//                        //String notificationItem =  list.get(i).sensorID + list.get(i).sensorType + list.get(i).value;
-//                        //notificationListAL.add(notificationItem);
-//                        if(list.get(i).severity == "HIGH") {
-//                            //TODO DO NOT USE == to check String
-//                            Log.e("notificationItem",list.get(i).severity);
-//                            break;
-//                        }
-//                    }
-//                }
-//            };
     }
 
     DataServices mServices;
@@ -97,14 +73,32 @@ public class Notification extends AppCompatActivity {
 
             IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
                 @Override
-                public void DataReceived(MessageType id, JSONObject jsonD) {
-                    if (jsonD != null) {
-                        android.util.Log.e("CallBack??worked??", jsonD + "");
-                    }
+                public void DataReceived(MessageType id, final JSONObject jsonD) {
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+
+                            if (jsonD != null) {
+                                android.util.Log.e("CallBack??worked??", jsonD + "");
+                            } else {
+                                android.util.Log.e("JSON", "No JSON received");
+                            }
+
+                            DataSerialization serializer = new DataSerialization();
+
+                            List<DC_Notification> list = serializer.getNotification(jsonD);
+
+                            populateNotificationList(list);
+
+                            android.util.Log.d("UI thread", "I am the UI thread");
+
+                        }
+
+                    });
+
 
                 }
             };
-//            Log.e("Momo message",message);
 
             //sample data
             String message;
@@ -121,11 +115,33 @@ public class Notification extends AppCompatActivity {
         }
     };
 
-    private HashMap<String, String> createEmployee(String name, String number) {
-        HashMap<String, String> employeeNameNo = new HashMap<String, String>();
-        employeeNameNo.put(name, number);
-        return employeeNameNo;
+
+    private void populateNotificationList(List<DC_Notification> list){
+
+        // Data List
+        listView=(ListView)findViewById(R.id.notification_list);
+
+        dataModels= new ArrayList<>();
+
+        // Hard coded additions for testing
+//        dataModels.add(new SensorListDataModel("Temp",     "1", "56 F",  0, 0));
+//        dataModels.add(new SensorListDataModel("Humidity", "2", "10 F",  1, 1));
+//        dataModels.add(new SensorListDataModel("Temp",     "3", "13 F",  2, 3));
+//        dataModels.add(new SensorListDataModel("Humidity", "4", "300 C", 3, 2));
+//        dataModels.add(new SensorListDataModel("Temp",     "5", "99F ",  4, 1));
+
+        for (DC_Notification notification : list) {
+            dataModels.add(new NotificationListDataModel(notification.sensorName, notification.data, notification.severity,
+                    notification.time));
+        }
+
+
+        adapter= new NotificationListAdapter(dataModels,getApplicationContext());
+
+        listView.setAdapter(adapter);
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

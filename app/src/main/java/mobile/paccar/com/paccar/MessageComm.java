@@ -209,7 +209,7 @@ public class MessageComm implements IDataReceivedCallBack {
                     }
 
                 }
-                if (checkNotification(30L)) {
+                if (checkNotification(10L)) {
                     java.util.Date date = new java.util.Date();
 //                    System.out.println(new Timestamp(date.getTime()));
 

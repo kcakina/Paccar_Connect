@@ -18,7 +18,8 @@
         android:title="@string/notifications"
         android:visible="true"
         app:actionLayout="@layout/notification_layout"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
+
     </item>
 
 </menu>
