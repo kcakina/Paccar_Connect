@@ -1,8 +1,11 @@
 package mobile.paccar.com.paccar;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -13,17 +16,23 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
+import org.json.JSONObject;
+
 import mobile.paccar.com.paccar.dummy.ConfigDummy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +58,7 @@ public class SettingListActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        toolbar.setTitle(getTitle());
 
         View recyclerView = findViewById(R.id.setting_list);
@@ -66,7 +75,91 @@ public class SettingListActivity extends AppCompatActivity {
 
     }
 
-    @Override
+
+    DataServices mServices;
+    boolean mBound = false;
+
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            DataServices.LocalBinder binder = (DataServices.LocalBinder) service;
+            mServices = binder.getService();
+            if(mServices == null) {
+                Log.e("mServices in the PA","is null");
+            } else {
+                Log.e("mServices in the PA","is not null");
+            }
+            mBound = true;
+
+
+            IDataReceivedCallBack callBack = new IDataReceivedCallBack() {
+                @Override
+                public void DataReceived(MessageType id, final JSONObject jsonD) {
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+
+                            if (jsonD != null) {
+                                Log.e("CallBack??worked??", jsonD + "");
+                            } else {
+                                Log.e("JSON", "No JSON received");
+                            }
+
+                            DataSerialization serializer = new DataSerialization();
+
+                            List<DC_SensorCofig> list = serializer.getSensorConfigData(jsonD);
+
+                            //PopulateSettingList(list);
+
+                            Log.d("UI thread", "I am the UI thread");
+
+                        }
+
+                    });
+                }
+            };
+
+            //sample data
+            String message;
+
+            message = OutgoingJsonCreation.getProfileList();
+
+            mServices.sendRequest(callBack, MessageType.GetProfileList, message);
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+
+    private void populateSensorList(List<DC_Sensor> list){
+
+        // Data List
+//        listView=(ListView)findViewById(R.id.list);
+//
+//        dataModels= new ArrayList<>();
+//
+//        for (DC_Sensor sensor : list) {
+//            dataModels.add(new SensorListDataModel(sensor.sensorType, sensor.sensorName, sensor.sensorId, sensor.sensorData,
+//                    sensor.sensorNum, sensor.sensorSeverity));
+//        }
+//
+//
+//        adapter= new SensorListAdapter(dataModels,getApplicationContext());
+//
+//        listView.setAdapter(adapter);
+
+    }
+
+
+        @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 //        int id = item.getItemId();
 //        if (id == android.R.id.home) {

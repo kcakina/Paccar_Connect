@@ -13,16 +13,13 @@ public class SensorListDataModel {
 
 
 
-    public SensorListDataModel(String sType, String name, String id, String current_data, int sensor_number, int severity,
-                               double upThresh, double lowThresh) {
+    public SensorListDataModel(String sType, String name, String id, String current_data, int sensor_number, int severity) {
         this.sensorType=sType;
         this.sensorName=name;
         this.sensorID=id;
         this.currentData=current_data;
         this.sensorNumber=sensor_number;
         this.sensorSeverity=severity;
-        this.upperThreshold=upThresh;
-        this.lowerThreshold=lowThresh;
     }
 
 

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 import org.json.JSONObject;
@@ -170,6 +171,80 @@ public class sensorListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setContentView(R.layout.activity_sensor_list);
+
+        currentSeverityLevel = SeverityLevel.NotSet;
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //toolbar.setTitle(getTitle());
+
+        //bluetooth
+        Intent intent = new Intent(this, DataServices.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
+        getSensorDataCallBack = new IDataReceivedCallBack() {
+            @Override
+            public void DataReceived(MessageType id, final JSONObject jsonD) {
+                //TODO send the data to addItem(),
+                Log.e("getSensorDataCallBack","WORKED!");
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        if (jsonD != null) {
+                            Log.e("CallBack??worked??", jsonD + "");
+                        } else {
+                            Log.e("JSON", "No JSON received");
+                        }
+
+                        DataSerialization serializer = new DataSerialization();
+
+                        List<DC_SensorData> list = serializer.getSensorData(jsonD);
+
+                        updateSensorData(list);
+
+                        Log.d("UI thread", "Give me data");
+
+                    }
+
+                });
+            }
+        };
+
+        notificationCountCallBack = new IDataReceivedCallBack() {
+            @Override
+            public void DataReceived(MessageType id, final JSONObject jsonD) {
+                Log.e("I'm in the CallBack","SLA");
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        DataSerialization jsonSerializer = new DataSerialization();
+                        DC_NotificationCount counts = jsonSerializer.getNotificationCount(jsonD);
+
+
+                        // Updating Notification icon
+                        updateNotificationIcon(counts);
+
+                        // Updating notification count
+                        int totalCount = counts.low + counts.medium + counts.high;
+
+                        updateHotCount(totalCount);
+
+                        Log.d("UI thread", "Give me notifications");
+                    }
+
+                });
+            }
+        };
+
+    }
+
     DataServices mServices;
     boolean mBound = false;
 
@@ -276,7 +351,7 @@ public class sensorListActivity extends AppCompatActivity {
 
         for (DC_Sensor sensor : list) {
             dataModels.add(new SensorListDataModel(sensor.sensorType, sensor.sensorName, sensor.sensorId, sensor.sensorData,
-                    sensor.sensorNum, sensor.sensorSeverity, sensor.upperThreshold, sensor.lowerThreshold));
+                    sensor.sensorNum, sensor.sensorSeverity));
         }
 
 
@@ -312,8 +387,20 @@ public class sensorListActivity extends AppCompatActivity {
         for (DC_SensorData sensorData : list) {
             for (SensorListDataModel sensor : dataModels) {
                 if (sensor.getID().equalsIgnoreCase(sensorData.sensorId)) {
-                    sensor.currentData = sensorData.sensorData;         // Data update
                     sensor.sensorSeverity = sensorData.sensorSeverity;  // Severity update
+
+                    if (sensorData.sensorId.equalsIgnoreCase("1")) {    // Updates the name
+                        sensor.sensorName = "Door Sensor";
+                        if (sensorData.sensorData.equalsIgnoreCase("0")){
+                            sensor.currentData = "Closed";         // Data update
+                        } else {
+                            sensor.currentData = "Open";         // Data update
+                        }
+
+                    } else if (sensorData.sensorId.equalsIgnoreCase("2")) {
+                        sensor.sensorName = "Temperature Sensor";
+                        sensor.currentData = sensorData.sensorData;         // Data update
+                    }
                 }
             }
         }
@@ -331,9 +418,22 @@ public class sensorListActivity extends AppCompatActivity {
 
         // Main display of home screen
 
-        textViewData.setText(list.get(1).sensorData);
+        if (list.get(0).sensorId.equalsIgnoreCase("1")) {       // Updates the name
+            textViewName.setText("Door Sensor");                // Id is 1 -> door sensor
+            if (list.get(0).sensorData.equalsIgnoreCase("1")){  // door open or closed. converts
+                list.get(0).sensorData = "Open";
+            } else {
+                list.get(0).sensorData = "Closed";
 
-        switch (list.get(1).sensorSeverity) {
+            }
+
+        } else if (list.get(0).sensorId.equalsIgnoreCase("2")) {  // Id is 2 -> temp sensor
+            textViewName.setText("Temperature Sensor");
+        }
+
+        textViewData.setText(list.get(0).sensorData);         // Data update
+
+        switch (list.get(0).sensorSeverity) {
             case 0:
                 mainHome.setBackgroundResource(R.drawable.no_severity_mainborder);
                 break;
@@ -365,15 +465,12 @@ public class sensorListActivity extends AppCompatActivity {
 //            return true;
 //        }
 
-        Menu menu = null;
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-
         switch (item.getItemId()) {
 
             //setting icon should lead me to the setting page... but which page is the setting page?
             case R.id.action_settings:
-                Intent i=new Intent(getApplicationContext(),SettingListActivity.class);
+                Intent i=new Intent(getApplicationContext(),Notification.class);
+                        //i=new Intent(getApplicationContext(),SettingListActivity.class);
                 startActivity(i);
                 return true;
 
@@ -385,18 +482,17 @@ public class sensorListActivity extends AppCompatActivity {
 
         }
 
-        final MenuItem mItem = menu.findItem(R.id.notification_icon);
-        mItem.getActionView().setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),Notification.class);
-                startActivity(i);
-            }
-        });
-
         return super.onOptionsItemSelected(item);
     }
+
+
+//    public void clickEvent(View v) {
+//        if (v.getId() == R.id.notification_icon) {
+//            Toast.makeText(sensorListActivity.this, "you click on textView1",
+//                    Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
 
     //adding the menu to sensorbar.
     // Menu testing 1 2 3...1 2 3
@@ -416,16 +512,6 @@ public class sensorListActivity extends AppCompatActivity {
         // Adding badge to icon
         final View notifications = menu.findItem(R.id.action_notification).getActionView();
         txtViewCount = (TextView) notifications.findViewById(R.id.txtCount);
-
-
-//        final MenuItem notificationIcon = menu.findItem(R.id.action_notification);
-//
-//        notificationIcon.getActionView().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onOptionsItemSelected(notificationIcon);
-//            }
-//        });
 
 
         //initialize notification count

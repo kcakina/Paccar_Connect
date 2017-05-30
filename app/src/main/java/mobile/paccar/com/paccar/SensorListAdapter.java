@@ -107,7 +107,7 @@ public class SensorListAdapter extends ArrayAdapter<SensorListDataModel> {
 
         result=convertView;
 
-        viewHolder.txtNumber.setText(String.valueOf(dataModel.getNumber()));
+        viewHolder.txtNumber.setText(String.valueOf(dataModel.getID()));
         viewHolder.txtSensorName.setText(dataModel.getName());
         viewHolder.txtCurrentData.setText(dataModel.getCurrentData());
 

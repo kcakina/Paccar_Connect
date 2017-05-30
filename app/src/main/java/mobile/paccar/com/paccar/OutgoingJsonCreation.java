@@ -56,6 +56,27 @@ public class OutgoingJsonCreation {
         return message;
     }
 
+    public static String getSensorConfigData() {
+        Map<String, String> datalist = new HashMap<String, String>();
+        datalist.put("messageID", "9");
+        Log.e("MessageID", "9,DataServices");//notifications
+        String message = convertToJSON(datalist);
+
+        return message;
+    }
+
+    public static String saveSensorConfigData(int upThresh, int lowThresh) {
+        Map<String, String> datalist = new HashMap<String, String>();
+        datalist.put("messageID", "10");
+        datalist.put("sensorId", "thing");
+        datalist.put("upThresh",String.valueOf(3));
+        datalist.put("lowThresh",String.valueOf(3));
+        Log.e("MessageID", "10,DataServices");//notifications
+        String message = convertToJSON(datalist);
+
+        return message;
+    }
+
 
     public static String convertToJSON(Map<String, String> finalList) {
 

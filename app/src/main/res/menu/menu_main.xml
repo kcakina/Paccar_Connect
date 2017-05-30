@@ -12,7 +12,6 @@
 
     <item
         android:id="@+id/action_notification"
-        android:icon="@drawable/ic_action_notification"
         android:menuCategory="secondary"
         android:orderInCategory="1"
         android:title="@string/notifications"

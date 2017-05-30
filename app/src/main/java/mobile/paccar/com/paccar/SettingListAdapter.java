@@ -8,34 +8,29 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 
-public class NotificationListAdapter extends ArrayAdapter<NotificationListDataModel> {
+public class SettingListAdapter extends ArrayAdapter<SettingListDataModel> {
 
-    private ArrayList<NotificationListDataModel> dataSet;
+    private ArrayList<SettingListDataModel> dataSet;
     Context mContext;
-    int index;
 
     // View lookup cache
     private static class ViewHolder {
         TextView txtNumber;
         TextView txtSensorName;
-        TextView txtData;
-        TextView txtTime;
-        ImageView severity;
+        TextView txtCurrentData;
     }
 
 
-    public NotificationListAdapter(ArrayList<NotificationListDataModel> data, Context context) {
-        super(context, R.layout.notification_row, data);
+    public SettingListAdapter(ArrayList<SettingListDataModel> data, Context context) {
+        super(context, R.layout.setting_row, data);
         this.dataSet = data;
         this.mContext=context;
-        index = 0;
 
     }
 
@@ -57,7 +52,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationListDataMo
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        NotificationListDataModel dataModel = getItem(position);
+        SettingListDataModel dataModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -67,7 +62,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationListDataMo
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.notification_row, parent, false);
+            convertView = inflater.inflate(R.layout.setting_row, parent, false);
 
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -76,24 +71,9 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationListDataMo
 
         // Update the data!
 
-        viewHolder.txtNumber = (TextView) convertView.findViewById(R.id.number);
+        viewHolder.txtNumber = (TextView) convertView.findViewById(R.id.sensor_number);
         viewHolder.txtSensorName = (TextView) convertView.findViewById(R.id.sensor_name);
-        viewHolder.txtData = (TextView) convertView.findViewById(R.id.current_data);
-        viewHolder.txtTime = (TextView) convertView.findViewById(R.id.notification_time);
-        viewHolder.severity = (ImageView) convertView.findViewById(R.id.notification_icon);
 
-
-        switch (dataModel.getSeverity()) {
-            case "low":
-                viewHolder.severity.setImageResource(R.drawable.ic_action_lnotification);
-                break;
-            case "medium":
-                viewHolder.severity.setImageResource(R.drawable.ic_action_mnotification);
-                break;
-            case "high":
-                viewHolder.severity.setImageResource(R.drawable.ic_action_hnotification);
-                break;
-        }
 
         // Set on click for individual sensor pages - not working...
 //        convertView.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +89,8 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationListDataMo
 
         result=convertView;
 
-        //viewHolder.txtNumber.setText(String.valueOf(index++));
+        viewHolder.txtNumber.setText(String.valueOf(dataModel.getID()));
         viewHolder.txtSensorName.setText(dataModel.getName());
-        viewHolder.txtData.setText(dataModel.getData());
-        viewHolder.txtTime.setText(dataModel.getTime());
 
         // Return the completed view to render on screen
         return result;
@@ -120,4 +98,3 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationListDataMo
 
 
 }
-

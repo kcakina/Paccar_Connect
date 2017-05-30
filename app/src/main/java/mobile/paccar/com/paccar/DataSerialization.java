@@ -121,7 +121,7 @@ public class DataSerialization {
 
                 String severity = jsonObject.optString("severity");
                 String sensorData = jsonObject.optString("data");
-                String sensorName = jsonObject.optString("name");
+                String sensorName = jsonObject.optString("sensorName");
                 String notificationTime = jsonObject.optString("time");
 
                 notification = new DC_Notification();
@@ -195,8 +195,6 @@ public class DataSerialization {
                 String id = jsonObject.optString("sensorID");
                 String name = jsonObject.optString("sensorName");
                 String currentData = jsonObject.optString("data");
-                Double upperThresh = jsonObject.optDouble("upperThresh");
-                Double lowerThresh = jsonObject.optDouble("lowerThresh");
                 int number = jsonObject.optInt("sensorNumber");
                 int severity = jsonObject.optInt("severity");
 
@@ -205,8 +203,6 @@ public class DataSerialization {
                 sensor.sensorId = id;
                 sensor.sensorName = name;
                 sensor.sensorData = currentData;
-                sensor.upperThreshold = upperThresh;
-                sensor.lowerThreshold = lowerThresh;
                 sensor.sensorNum = number;
                 sensor.sensorSeverity = severity;
 
@@ -247,6 +243,70 @@ public class DataSerialization {
 
                 list.add(sensorData);
             }
+
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return list;
+    }
+
+
+    public List<DC_SensorCofig> getSensorConfigData(JSONObject data) {
+        List<DC_SensorCofig> list = new ArrayList<DC_SensorCofig>();
+        DC_SensorCofig sensorConfig = null;
+        //JSONObject data = null;
+
+        try {
+            Log.d("YourTag", "YourOutput");
+            //Get the instance of JSONArray that contains JSONObjects
+            JSONArray jsonArray = data.optJSONArray("messageID: 9");
+
+            //Iterate the jsonArray and print the info of JSONObjects
+            for(int i=0; i < jsonArray.length(); i++){
+                Log.d("YourTag", "YourOutput");
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                String id = jsonObject.optString("sensorID");
+                String name = jsonObject.optString("sensorName");
+                int lThresh = jsonObject.optInt("lowThresh");
+                int uThresh = jsonObject.optInt("upThresh");
+
+
+                sensorConfig = new DC_SensorCofig();
+                sensorConfig.sensorId = Integer.getInteger(id);
+                sensorConfig.sensorName = name;
+                sensorConfig.lowThresh = lThresh;
+                sensorConfig.upThresh = uThresh;
+
+
+                list.add(sensorConfig);
+            }
+
+        } catch (JSONException e) {e.printStackTrace();}
+
+        return list;
+    }
+
+
+    public List<DC_isSaved> saveSensorConfigData(JSONObject data) {
+        List<DC_isSaved> list = new ArrayList<DC_isSaved>();
+        DC_isSaved sensorConfigSave = null;
+        //JSONObject data = null;
+
+        try {
+            Log.d("YourTag", "YourOutput");
+            //Get the instance of JSONArray that contains JSONObjects
+            JSONArray jsonArray = data.optJSONArray("messageID: 10");
+
+            //Iterate the jsonArray and print the info of JSONObjects
+            Log.d("YourTag", "YourOutput");
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+            Boolean isSaved = jsonObject.optBoolean("isSaved");
+
+            sensorConfigSave = new DC_isSaved();
+            sensorConfigSave.isSaved = isSaved;
+
+            list.add(sensorConfigSave);
 
         } catch (JSONException e) {e.printStackTrace();}
 

@@ -283,7 +283,6 @@ public class ProfileActivity extends AppCompatActivity {
                     });
                 }
             };
-//            Log.e("Momo message",message);
 
             //sample data
             String message;
@@ -302,7 +301,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void PopulateProfiles(List<DC_Profile> list) {
         LinearLayout layout = (LinearLayout) findViewById(R.id.linearlayout);
-        //String[] mTextofButton = { "Perishables", "Non-perishables", "Frozen", "Furniture", "Electronics", "Miscellaneous"};
 
         int count = list.size();
 

@@ -32,7 +32,7 @@ public class Notification extends AppCompatActivity {
 
     // DataModel list
     ArrayList<NotificationListDataModel> dataModels;
-    ListView listView;
+    ListView nlistView;
 
     private static NotificationListAdapter adapter;
 
@@ -42,7 +42,8 @@ public class Notification extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        setContentView(R.layout.activity_sensor_detail_list);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,6 +52,22 @@ public class Notification extends AppCompatActivity {
         Intent intent = new Intent(this, DataServices.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //bluetooth
+        Intent intent = new Intent(this, DataServices.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //bluetooth
+        Intent intent = new Intent(this, DataServices.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     DataServices mServices;
@@ -119,7 +136,7 @@ public class Notification extends AppCompatActivity {
     private void populateNotificationList(List<DC_Notification> list){
 
         // Data List
-        listView=(ListView)findViewById(R.id.notification_list);
+        nlistView=(ListView)findViewById(R.id.notifications);
 
         dataModels= new ArrayList<>();
 
@@ -131,14 +148,14 @@ public class Notification extends AppCompatActivity {
 //        dataModels.add(new SensorListDataModel("Temp",     "5", "99F ",  4, 1));
 
         for (DC_Notification notification : list) {
-            dataModels.add(new NotificationListDataModel(notification.sensorName, notification.data, notification.severity,
-                    notification.time));
+            dataModels.add(new NotificationListDataModel(notification.severity, notification.sensorName,
+                    notification.data, notification.time));
         }
 
 
         adapter= new NotificationListAdapter(dataModels,getApplicationContext());
 
-        listView.setAdapter(adapter);
+        nlistView.setAdapter(adapter);
 
     }
 
